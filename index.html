@@ -9,8 +9,15 @@
 <body>
     <div class="calendar-container">
         <div class="calendar-header">
-            <h2 id="current-month-year"></h2>
-            <div id="total-office-days">Total Office Days: <span id="office-days-count">0</span></div>
+            <div class="month-navigation">
+                <button id="prev-month-btn" class="nav-btn">&lt;</button>
+                <h2 id="current-month-year"></h2>
+                <button id="next-month-btn" class="nav-btn">&gt;</button>
+            </div>
+            <div class="header-controls">
+                <div id="total-office-days">Total Office Days: <span id="office-days-count">0</span></div>
+                <button id="reset-month-data-btn" class="control-btn">Reset Month Data</button>
+            </div>
         </div>
         <div id="week-days">
             <div class="day-name">Mon</div>
@@ -27,10 +34,12 @@
             </div>
     </div>
     
+    <script src="js/publicHolidays.js"></script>
     <script src="js/dataManager.js"></script>
     <script src="js/calendarGenerator.js"></script>
     <script src="js/eventHandlers.js"></script>
     <script src="js/calculationEngine.js"></script>
     <script src="js/uiUpdater.js"></script>
-    <script src="js/main.js"></script> </body>
+    <script src="js/main.js"></script> 
+</body>
 </html>

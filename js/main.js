@@ -22,20 +22,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // Perform initial calculations and UI updates after the calendar is first rendered
     onDateStateChange();
 
-    // Future: Add event listeners for month navigation buttons if implemented
-    // Example:
-    // document.getElementById('prev-month-btn').addEventListener('click', () => {
-    //     calendarGenerator.prevMonth();
-    //     calendarGenerator.renderCalendar((tile) => {
-    //         eventHandlers.attachTileClickListener(tile, onDateStateChange);
-    //     });
-    //     onDateStateChange(); // Recalculate and update UI after month change
-    // });
-    // document.getElementById('next-month-btn').addEventListener('click', () => {
-    //     calendarGenerator.nextMonth();
-    //     calendarGenerator.renderCalendar((tile) => {
-    //         eventHandlers.attachTileClickListener(tile, onDateStateChange);
-    //     });
-    //     onDateStateChange(); // Recalculate and update UI after month change
-    // });
+    // Add event listeners for month navigation buttons
+    document.getElementById('prev-month-btn').addEventListener('click', () => {
+        calendarGenerator.prevMonth();
+        calendarGenerator.renderCalendar((tile) => {
+            eventHandlers.attachTileClickListener(tile, onDateStateChange);
+        });
+        onDateStateChange(); // Recalculate and update UI after month change
+    });
+    document.getElementById('next-month-btn').addEventListener('click', () => {
+        calendarGenerator.nextMonth();
+        calendarGenerator.renderCalendar((tile) => {
+            eventHandlers.attachTileClickListener(tile, onDateStateChange);
+        });
+        onDateStateChange(); // Recalculate and update UI after month change
+    });
+
+    // Add event listener for the reset month button
+    document.getElementById('reset-month-data-btn').addEventListener('click', () => {
+        const currentMonthYear = calendarGenerator.getCurrentMonthYear();
+        dataManager.clearMonthData(currentMonthYear.year, currentMonthYear.month);
+        calendarGenerator.renderCalendar((tile) => {
+            eventHandlers.attachTileClickListener(tile, onDateStateChange);
+        });
+        onDateStateChange(); // Recalculate and update UI after reset
+    });
 });
