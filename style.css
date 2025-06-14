@@ -1,0 +1,165 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background-color: #f4f7f6;
+    margin: 20px;
+}
+
+.calendar-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.calendar-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.8em;
+}
+
+#total-office-days {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #555;
+}
+
+#week-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr; /* 7 days + 2 columns for A and B */
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #777;
+    text-align: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.day-name {
+    padding: 8px 0;
+}
+
+.week-data-header {
+    padding: 8px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+#calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr; /* Matches header for alignment */
+    gap: 8px;
+}
+
+.date-tile {
+    background-color: #f7f7f7;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1; /* Makes tiles square */
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    font-size: 1.1em;
+    color: #444;
+    position: relative;
+    overflow: hidden;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.date-tile.empty {
+    background-color: transparent;
+    border: none;
+    cursor: default;
+}
+
+.date-tile:not(.empty):not(.red):hover {
+    background-color: #e6f7ff;
+    border-color: #99ccff;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+}
+
+/* Colors for date states */
+.date-tile.leave {
+    background-color: #e6ffe6; /* Light green */
+    border-color: #66cc66;
+}
+
+.date-tile.working {
+    background-color: #e6f2ff; /* Light blue */
+    border-color: #6699ff;
+}
+
+.date-tile.normal {
+    background-color: #f7f7f7; /* Default white/light grey */
+    border-color: #e0e0e0;
+}
+
+/* Red for weekends and holidays */
+.date-tile.red {
+    background-color: #ffe6e6; /* Light red */
+    border-color: #ff6666;
+    color: #cc0000;
+    cursor: default;
+}
+
+/* Styles for A and B values */
+.week-summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding-left: 10px; /* Space from calendar grid */
+    font-size: 0.9em;
+    color: #666;
+    text-align: center;
+}
+
+.week-summary .value {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Ensure empty cells for A/B values are styled */
+.empty-summary {
+    /* No specific styling needed, just ensures grid takes space */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .calendar-container {
+        padding: 20px;
+        width: 100%;
+    }
+
+    .calendar-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #week-days, #calendar-body {
+        grid-template-columns: repeat(7, 1fr); /* Collapse A/B columns on smaller screens */
+    }
+    
+    .week-data-header, .week-summary {
+        display: none; /* Hide A/B data on small screens, or re-think layout */
+    }
+}
