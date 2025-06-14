@@ -2,10 +2,11 @@
 
 const calculationEngine = (function() {
 
-    // Internal cache for calculated values to optimize performance if needed, though for a single month, direct calculation is fine.
-    let currentMonthAValues = {}; // Stores A values for each week
-    let currentMonthBValues = {}; // Stores B values for each week
-    let currentMonthCValue = 0;   // Stores the total C value for the month
+    // Internal cache for calculated values. While not strictly returned,
+    // they can be useful for debugging or future extensions.
+    // Let's make them local variables within recalculateAll for clarity as they are session-specific.
+    // Removed currentMonthAValues, currentMonthBValues, currentMonthCValue from outer scope
+    // as they are recalculated fully each time.
 
     /**
      * Calculates A (number of working days) for a given week.
@@ -16,6 +17,7 @@ const calculationEngine = (function() {
     function calculateA(weekDates) {
         let workingDaysCount = 0;
         weekDates.forEach(day => {
+            if (day === null) return; // Skip null placeholders
             const date = day.date;
             const dateString = day.dateString;
             const dayOfWeek = date.getDay(); // 0=Sunday, 1=Monday...
@@ -38,6 +40,7 @@ const calculationEngine = (function() {
     function calculateB(weekDates, A_value) {
         let leavesInWeek = 0;
         weekDates.forEach(day => {
+            if (day === null) return; // Skip null placeholders
             const date = day.date;
             const dateString = day.dateString;
             const dayOfWeek = date.getDay(); // 0=Sunday, 1=Monday...
@@ -70,11 +73,13 @@ const calculationEngine = (function() {
      */
     function recalculateAll(currentMonthYear) {
         const { month, year } = currentMonthYear;
-        const allDateStates = dataManager.getAllDateStates(); // Get all states once for efficiency
 
-        currentMonthAValues = {};
-        currentMonthBValues = {};
-        currentMonthCValue = 0;
+        // Variables to accumulate values for the entire month
+        let totalSumBForMonth = 0; // Accumulates sum of 'B' values for the month (new)
+        let userSelectedWorkingDaysCount = 0; // Counts user-selected 'working' days (new)
+        
+        // Debugging log: Start of recalculation
+        console.log(`--- Recalculating for ${month + 1}/${year} ---`);
 
         const firstDayOfMonth = new Date(year, month, 1);
         const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -85,17 +90,33 @@ const calculationEngine = (function() {
 
         let week = [];
         let weekIndex = 0;
-        const weeklyCalculations = []; // To store A, B for each week
+        const weeklyCalculations = []; // To store A, B for each week to be returned
 
         // Add placeholder days for the start of the first week if month doesn't start on Monday
         for (let i = 0; i < dayOffset; i++) {
             week.push(null); // Placeholder for empty cells before 1st of month
         }
 
+        // Loop through all days of the month
         for (let day = 1; day <= daysInMonth; day++) {
             const date = new Date(year, month, day);
             const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             
+            const dayOfWeek = date.getDay(); // 0=Sunday, 1=Monday...
+
+            // Check if this day is an eligible working day (Mon-Fri, not public holiday)
+            // AND if it's marked 'working' by the user. This contributes to the subtraction for C.
+            const isEligibleForUserWorkingCount = (dayOfWeek >= 1 && dayOfWeek <= 5 && !dataManager.isPublicHoliday(dateString));
+            const currentState = dataManager.getDateState(dateString);
+
+            // Debugging log: Individual day's status
+            console.log(`Day: ${dateString}, DayOfWeek: ${dayOfWeek}, IsPublicHoliday: ${dataManager.isPublicHoliday(dateString)}, State: ${currentState}, Eligible for UserWorking Count: ${isEligibleForUserWorkingCount}`);
+
+            if (isEligibleForUserWorkingCount && currentState === 'working') {
+                userSelectedWorkingDaysCount++;
+                console.log(`  -> Day ${dateString} is a user-selected 'working' day. Current userSelectedWorkingDaysCount: ${userSelectedWorkingDaysCount}`);
+            }
+
             week.push({ date: date, dateString: dateString });
 
             // If it's the end of the week (Sunday, or last day of month)
@@ -109,12 +130,16 @@ const calculationEngine = (function() {
                 const actualWeekDays = week.filter(d => d !== null);
 
                 const A = calculateA(actualWeekDays);
-                const B = calculateB(actualWeekDays, A);
+                const B = calculateB(actualWeekDays, A); // B needs A
 
-                currentMonthAValues[weekIndex] = A;
-                currentMonthBValues[weekIndex] = B;
-                currentMonthCValue += B;
+                totalSumBForMonth += B; // Accumulate B values for the month's total B (new)
 
+                // Debugging log: Weekly summary
+                console.log(`--- End of Week (or month) Summary ---`);
+                console.log(`  Week Index: ${weekIndex}, A for this week: ${A}, B for this week: ${B}`);
+                console.log(`  Cumulative totalSumBForMonth: ${totalSumBForMonth}`); // Log the accumulated B sum
+                console.log(`------------------------------------`);
+                
                 weeklyCalculations.push({ weekIndex: weekIndex, A: A, B: B });
 
                 week = []; // Start a new week
@@ -122,15 +147,23 @@ const calculationEngine = (function() {
             }
         }
         
+        // Calculate the final C value using the NEW formula: max(SumB - UserWorking, 0)
+        const finalCValue = Math.max(totalSumBForMonth - userSelectedWorkingDaysCount, 0); // This is the corrected formula
+
+        // Debugging log: Final results
+        console.log(`=== Final Calculation Results for ${month + 1}/${year} ===`);
+        console.log(`Total Sum of B for Month (totalSumBForMonth): ${totalSumBForMonth}`);
+        console.log(`User Selected Working Days Count (userSelectedWorkingDaysCount): ${userSelectedWorkingDaysCount}`);
+        console.log(`Final C Value (max(SumB - UserWorking, 0)): ${finalCValue}`); // Updated formula text
+        console.log(`================================================`);
+
         return {
             weeklyData: weeklyCalculations,
-            totalC: currentMonthCValue
+            totalC: finalCValue
         };
     }
 
     return {
         recalculateAll,
-        // You could add getters for currentMonthAValues, currentMonthBValues, currentMonthCValue if needed externally
-        // but for now, recalculateAll returns them.
     };
 })();

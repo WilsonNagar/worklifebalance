@@ -8,7 +8,7 @@ const dataManager = (function() {
 
     // Stores the state of each date. Key: 'YYYY-MM-DD', Value: 'normal', 'leave', 'working'
     let dateStates = {}; // Changed from const to let to allow reassignment on load
-    let publicHolidays = {}; // Placeholder for public holidays, will be populated from the imported module
+    // let publicHolidays = {}; // Placeholder for public holidays, will be populated from the imported module
 
     /**
      * Initializes dateStates by attempting to load from localStorage.
