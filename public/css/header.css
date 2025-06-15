@@ -1,0 +1,99 @@
+/* css/header.css */
+
+/* --- Top Controls Bar (REMOVED from HTML, so these styles are now effectively unused but kept for reference if needed) --- */
+/*
+.top-controls-bar {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+*/
+
+#reset-month-data-btn { /* This rule is now overridden by .sidebar-btn if present, or acts as fallback */
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#reset-month-data-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+#reset-month-data-btn:active {
+    background-color: #bd2130;
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* --- Calendar Header (Month Navigation) --- */
+.calendar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px; /* Margin below header */
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 15px; /* Gap between arrows and month text */
+}
+
+.calendar-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.8em;
+    text-align: center;
+}
+
+.month-navigation {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Margin between month text and arrows */
+}
+
+/* --- Arrow Button Styling --- */
+.nav-arrow-btn {
+    background-color: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.15);
+}
+
+.nav-arrow-btn:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.2);
+}
+
+.nav-arrow-btn:active {
+    background-color: #0056b3;
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}

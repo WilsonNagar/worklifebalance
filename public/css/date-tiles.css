@@ -1,0 +1,165 @@
+/* css/date-tiles.css */
+
+/* --- Date Tile Base Styling --- */
+.date-tile {
+    position: relative; /* Needed for background icons */
+    overflow: hidden; /* Ensure background image doesn't overflow rounded corners */
+    background-color: #f7f7f7; /* Default fallback */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* Stack contents vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    aspect-ratio: 1 / 1; /* Makes tiles square */
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    font-size: 1.1em; /* Base font size, overridden by child spans */
+    color: #444; /* Base text color, overridden by child spans */
+    padding: 5px 2px; /* Adjust padding to make space for text */
+    line-height: 1.2; /* Adjust line height for better spacing */
+    box-sizing: border-box;
+}
+
+.date-tile.empty {
+    background-color: transparent;
+    border: none;
+    cursor: default;
+}
+
+/* --- Specific Tile State Backgrounds & Hover Effects --- */
+
+/* Normal Tile (WFH) */
+.date-tile.normal {
+    background-color: #FFF9C4; /* Very light, soft yellow */
+    border-color: #FFEE58; /* Slightly brighter yellow border */
+}
+.date-tile.normal:not(.red):hover {
+    background-color: #FFFDE7; /* Even lighter on hover for subtlety */
+    border-color: #FFEB3B; /* Slightly more prominent border on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(255, 249, 196, 0.3);
+}
+
+/* Leave Tile */
+.date-tile.leave {
+    background-color: #d1f7d1; /* Slightly richer green */
+    border-color: #4CAF50; /* Matching border */
+}
+.date-tile.leave:not(.red):hover {
+    background-color: #e6fae6; /* Lighter green on hover */
+    border-color: #66CC66;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
+}
+
+/* Working Tile (WFO) */
+.date-tile.working {
+    background-color: #d1e9ff; /* Slightly richer blue */
+    border-color: #2196F3; /* Matching border */
+}
+.date-tile.working:not(.red):hover {
+    background-color: #e6f2ff; /* Lighter blue on hover */
+    border-color: #6699FF;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+}
+
+/* Red (Weekends and Public Holidays) */
+.date-tile.red {
+    background-color: #ffe6e6; /* Light red */
+    border-color: #ff6666;
+    color: #cc0000;
+    cursor: default;
+}
+
+/* Optional Holiday Tile - has its own light yellow background and thick border */
+.date-tile.optional-holiday {
+    border: 4px solid #cc8800;
+}
+/* Optional Holiday specific text color */
+.date-tile.optional-holiday .state-text {
+    color: #333; /* Dark text for readability on optional holiday tiles */
+}
+
+
+/* --- Text Label Styling --- */
+.date-tile .date-number {
+    font-size: 2.4em; /* Make date number bigger */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.date-tile .state-text {
+    font-size: 0.8em; /* Make text little bigger */
+    font-weight: 600;
+    text-transform: uppercase; /* All uppercase */
+    color: #555; /* Default gray for state text, overridden by specific state colors */
+    text-align: center;
+    line-height: 1.2;
+    padding: 0 2px;
+    box-sizing: border-box;
+}
+
+.date-tile .holiday-name-text {
+    font-size: 0.85em; /* Even smaller for holiday names */
+    font-style: italic;
+    color: #101010;
+    text-align: center;
+    line-height: 1.1;
+    white-space: normal;
+    padding: 0 2px;
+    box-sizing: border-box;
+}
+
+/* Ensure red color applies to all text parts for red tiles */
+.date-tile.red .date-number,
+.date-tile.red .state-text,
+.date-tile.red .holiday-name-text {
+    color: #cc0000;
+}
+
+/* Make sure empty tiles don't show text placeholders */
+.date-tile.empty .date-number,
+.date-tile.empty .state-text,
+.date-tile.empty .holiday-name-text {
+    visibility: hidden;
+}
+
+/* --- Background Icons for Date Tiles --- */
+.date-tile::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 65%;
+    height: 65%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.date-tile.normal::before {
+    background-image: url('../images/wfh.png'); /* Path from css/date-tiles.css to images/ */
+}
+.date-tile.working::before {
+    background-image: url('../images/wfo.png'); /* Path from css/date-tiles.css to images/ */
+}
+.date-tile.leave::before {
+    background-image: url('../images/leave.png'); /* Path from css/date-tiles.css to images/ */
+}
+.date-tile.optional-holiday::before {
+    background-image: url('../images/party.png'); /* Path from css/date-tiles.css to images/ */
+    opacity: 0.08;
+}
+
+.date-tile.red::before,
+.date-tile.empty::before {
+    background-image: none !important;
+    opacity: 0;
+}

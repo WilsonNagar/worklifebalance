@@ -1,6 +1,11 @@
 // js/main.js
 
 document.addEventListener('DOMContentLoaded', () => {
+    // NEW: Developer-controlled variable for weekly summary visibility
+    // Set to 'false' to hide the Expected Working Days and Office Days sections by default for users.
+    // Set to 'true' to show them (for developer testing).
+    const SHOW_WEEKLY_SUMMARY_FOR_DEV = false; 
+
     /**
      * This function is the central callback for when a date tile's state changes,
      * or when the month changes, or when data is reset.
@@ -10,13 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentMonthYear = calendarGenerator.getCurrentMonthYear();
         const calculationResults = calculationEngine.recalculateAll(currentMonthYear);
         
-        // Update main C value
+        // Update main C value (Total Office Days)
         uiUpdater.updateCValue(calculationResults.totalC);
         
+        // Update the compliance status based on totalC
+        uiUpdater.updateComplianceStatus(calculationResults.totalC);
+
         // Update weekly A and B values
         uiUpdater.updateWeeklyABValues(calculationResults.weeklyData);
 
-        // NEW: Update the new leaves taken counts
+        // Update the new leaves taken counts
         uiUpdater.updateLeavesTakenCount(calculationResults.totalLeavesTaken);
         uiUpdater.updateOptionalLeavesTakenCount(calculationResults.totalOptionalLeavesTaken);
     }
@@ -56,4 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         onDateStateChange(); // Recalculate and update UI after reset
     });
+
+    // Removed: Get reference to the checkbox and its event listener
+
+    // NEW: Control visibility of weekly summary sections based on developer variable
+    const calendarContainer = document.querySelector('.calendar-container');
+    if (SHOW_WEEKLY_SUMMARY_FOR_DEV === false) {
+        calendarContainer.classList.add('hide-weekly-summary');
+    } else {
+        calendarContainer.classList.remove('hide-weekly-summary');
+    }
 });

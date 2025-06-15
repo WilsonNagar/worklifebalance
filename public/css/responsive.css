@@ -1,0 +1,109 @@
+/* css/responsive.css */
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) { /* Adjust breakpoint for larger screens to stack sidebar */
+    .calendar-container {
+        flex-direction: column; /* Stack sidebar and main calendar area vertically */
+        gap: 20px; /* Gap between stacked sections */
+        padding: 20px; /* Adjust container padding */
+    }
+
+    .left-sidebar {
+        width: 100%; /* Sidebar takes full width when stacked */
+        flex-direction: row; /* Arrange sidebar items horizontally */
+        flex-wrap: wrap; /* Allow sidebar items to wrap */
+        justify-content: center; /* Center items when horizontal */
+        padding: 15px; /* Adjust sidebar padding */
+        max-height: none; /* Remove max height constraint when horizontal */
+        overflow-y: visible; /* Disable vertical scroll */
+        gap: 20px; /* Gap between main sidebar sections (button, metrics, legend) */
+    }
+
+    .main-calendar-area {
+        min-width: unset; /* Remove min-width constraint when stacked */
+        width: 100%; /* Take full width */
+    }
+
+    #reset-month-data-btn.sidebar-btn {
+        width: auto; /* Allow button to shrink/grow based on content */
+        flex-grow: 1; /* Allow it to grow */
+        max-width: 250px; /* Limit button width */
+    }
+
+    .metrics-display-group {
+        flex-direction: row; /* Arrange metrics horizontally */
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px; /* Gap between metric boxes */
+        border-top: none; /* Remove border when horizontal */
+        border-bottom: none; /* Remove border when horizontal */
+        padding: 0; /* Remove padding */
+        width: auto; /* Allow width to shrink to content */
+    }
+    .metrics-display-group .metric-box {
+        width: 45%; /* Two columns for metrics on medium screens */
+        min-width: unset; /* Allow flexibility */
+        max-width: unset; /* Remove max-width for this arrangement */
+    }
+
+    .calendar-legend {
+        flex-direction: row; /* Arrange legend items horizontally */
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px 20px; /* Horizontal and vertical gap */
+        border-top: none; /* Remove border */
+        padding: 0; /* Remove padding */
+        width: auto; /* Allow width to shrink to content */
+    }
+    .legend-item {
+        padding-left: 0; /* Remove indent */
+    }
+}
+
+@media (max-width: 768px) { /* Adjustments for smaller screens (original breakpoint) */
+    /* Many rules previously here are now handled by the 992px breakpoint for the sidebar */
+
+    .calendar-header {
+        flex-direction: column; /* Stack month navigation and h2 */
+        align-items: flex-start;
+        padding-bottom: 10px;
+    }
+    .month-navigation {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+    .calendar-header h2 {
+        text-align: center;
+        flex-grow: 1;
+    }
+    
+    #week-days, #calendar-body {
+        grid-template-columns: repeat(7, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    /* Further stacking for very small screens */
+    .metrics-display-group { /* Make metrics stack vertically on very small screens */
+        flex-direction: column;
+        align-items: center;
+    }
+    .metrics-display-group .metric-box {
+        width: 90%; /* Single column for metrics */
+        max-width: none;
+    }
+    .calendar-legend { /* Make legend stack vertically on very small screens */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding-left: 10px;
+    }
+}
+
+@media (max-width: 500px) {
+    .nav-arrow-btn, #reset-month-data-btn.sidebar-btn {
+        padding: 6px 12px;
+        font-size: 0.9em;
+    }
+}

@@ -1,0 +1,77 @@
+/* css/metrics.css */
+
+/* --- Metrics Display Group (Used within the sidebar) --- */
+/* Note: The old .metrics-display-row styles are effectively moved and adapted into css/sidebar.css */
+
+/* Base style for all metric boxes (total office days, compliance, leaves taken) */
+.metric-box {
+    background-color: #eaf5ff; /* Light blue background */
+    border: 1px solid #cce0ff; /* Matching border */
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column; /* Stack text and numbers vertically within the box */
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Specific styling for spans inside metric boxes that hold numbers */
+.metric-box span:not(.compliance-icon):not(.compliance-text) {
+    color: #007bff;
+    font-size: 1.2em;
+}
+
+/* Compliance Status specific styling (within .metric-box) */
+.compliance-status {
+    background-color: #f9f9f9;
+    border-color: #eee;
+    color: #333;
+    padding: 12px 15px;
+    font-size: 1em;
+    flex-direction: row; /* Ensure icon and text are in a row */
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* Gap between icon and text */
+}
+
+.compliance-status .compliance-text {
+    text-align: center;
+    flex-grow: 1; /* Allow text to take available space */
+}
+
+.compliance-status .compliance-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Non-Compliant State */
+.compliance-status.non-compliant {
+    background-color: #ffe0e0;
+    border-color: #ff9999;
+    color: #cc0000;
+}
+.compliance-status.non-compliant .compliance-icon {
+    background-image: url('../images/cross-icon.png');
+}
+
+/* Compliant State */
+.compliance-status.compliant {
+    background-color: #e0ffe0;
+    border-color: #99ff99;
+    color: #008000;
+}
+.compliance-status.compliant .compliance-icon {
+    background-image: url('../images/check-icon.png');
+}
+
+/* The .count-box styles are covered by .metric-box */

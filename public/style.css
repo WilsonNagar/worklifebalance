@@ -1,13 +1,57 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', Arial, sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     min-height: 100vh;
     background-color: #f4f7f6;
-    margin: 20px;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
+/* --- Top Controls Bar --- */
+.top-controls-bar {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: flex-end; /* Align to the right, as only reset button remains */
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+#reset-month-data-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#reset-month-data-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+#reset-month-data-btn:active {
+    background-color: #bd2130;
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* --- Calendar Container --- */
 .calendar-container {
     background-color: #ffffff;
     border-radius: 12px;
@@ -17,30 +61,147 @@ body {
     max-width: 1200px;
 }
 
+/* --- Calendar Header (Month Navigation) --- */
 .calendar-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 25px;
     border-bottom: 1px solid #eee;
     padding-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .calendar-header h2 {
     margin: 0;
     color: #333;
     font-size: 1.8em;
+    text-align: center;
 }
 
-#total-office-days {
-    font-size: 1.2em;
+.month-navigation {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* --- Arrow Button Styling --- */
+.nav-arrow-btn {
+    background-color: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.15);
+}
+
+.nav-arrow-btn:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.2);
+}
+
+.nav-arrow-btn:active {
+    background-color: #0056b3;
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* --- Metrics Display Row --- */
+.metrics-display-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-top: 5px;
+}
+
+.metric-box {
+    background-color: #eaf5ff;
+    border: 1px solid #cce0ff;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 1em;
     font-weight: bold;
-    color: #555;
+    color: #333;
+    text-align: center;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 180px;
+    max-width: 280px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 
+.metric-box span:not(.compliance-icon):not(.compliance-text) {
+    color: #007bff;
+    font-size: 1.2em;
+}
+
+/* Compliance Status specific styling (within .metric-box) */
+.compliance-status {
+    background-color: #f9f9f9;
+    border-color: #eee;
+    color: #333;
+    padding: 12px 15px;
+    font-size: 1em;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.compliance-status .compliance-text {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.compliance-status .compliance-icon {
+    width: 25px;
+    height: 25px;
+}
+
+/* Non-Compliant State */
+.compliance-status.non-compliant {
+    background-color: #ffe0e0;
+    border-color: #ff9999;
+    color: #cc0000;
+}
+.compliance-status.non-compliant .compliance-icon {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2NjMDAwMCIgY2xhc3M9ImJpIGJpLXgtdXJsIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik00LjY0NiA0LjY0NmEuNS41IDAgMCAxIC43MDguNzA4TDMuNzA3IDggNC42NDYgOC45OTlhLjUu9OTkgMCAxIDEtLjc3OS43MDhsLS45MzktLjkzOWwtLjk0LjkzOWEuNS41IDAgMSAxLS43MDgtLjcwOEwzLjcwNyA4IDIuNzY3IDcuMDAxYS41LjU5OSAwIDAgMSAuNzA4LS43MDhMNCA2Ljk0Nmw0LjkzLTIuOTE3YS41LjU5OSAwIDAgMSAuNzA4LjcwOGwtNC45MyA0Ljl6Ii8+CiAgPHBhdGggZD0iTTggMTZhOC4wMDEgOC4wMDEgMCAwIDAgMCAxNi4xNzhsLjAwMy4wNzFhOCA4IDAgMSAwIC4wMDYtMTUuOTk1IDguMDAyIDguMDAyIDAgMCAwLS4wMDUtLjAwNXYtLjAwM1pNOA4xNC41YTYuNSA2LjUgMCAxIDEgMC0xMyA2LjUgNi41IDAgMCAxIDAgMTN6Ii8+Cjwvc3ZnPg==');
+}
+
+/* Compliant State */
+.compliance-status.compliant {
+    background-color: #e0ffe0;
+    border-color: #99ff99;
+    color: #008000;
+}
+.compliance-status.compliant .compliance-icon {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iIzAwODAwMCIgY2xhc3M9ImJpIGJpLWNoZWNrLWNpcmNsZS1maWxsIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik0xNiA4AOGE4IDAgMSAxLTExLjAwNi03LjY3NiA4LjAwMyA4LjAwMyAwIDAgMSAxMS4wMDYgNy42NzZ6bS0zLjQ2OC0zLjczM2wtNS41MjUgNi4yODJhLjUuNSAwIDAgMS0uNzQ4LjA0NWwtMi43NS0yLjU0YS41Ljk5OSAwIDEgMSAuNjktLjc0MWwyLjQ5NiAyLjMxIDUuMjM0LTUuOTU1YS41LjU5OSAwIDEgMSAuNzQzLjA2NHoiLz4KPC9zdmc+');
+}
+
+/* --- Weekdays Header and Calendar Body Grid --- */
 #week-days {
     display: grid;
-    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr; /* 7 days + 2 columns for A and B */
+    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr;
     font-weight: bold;
     margin-bottom: 15px;
     color: #777;
@@ -61,25 +222,28 @@ body {
 
 #calendar-body {
     display: grid;
-    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr; /* Matches header for alignment */
+    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr;
     gap: 8px;
 }
 
+/* --- Date Tile Base Styling --- */
 .date-tile {
+    position: relative;
+    overflow: hidden;
     background-color: #f7f7f7;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    aspect-ratio: 1 / 1; /* Makes tiles square */
+    aspect-ratio: 1 / 1;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
     font-size: 1.1em;
     color: #444;
-    position: relative;
-    overflow: hidden;
-    padding: 5px;
+    padding: 5px 2px;
+    line-height: 1.2;
     box-sizing: border-box;
 }
 
@@ -89,494 +253,289 @@ body {
     cursor: default;
 }
 
-.date-tile:not(.empty):not(.red):hover {
-    background-color: #e6f7ff;
-    border-color: #99ccff;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
-}
+/* --- Specific Tile State Backgrounds & Hover Effects --- */
 
-/* Colors for date states */
-.date-tile.leave {
-    background-color: #e6ffe6; /* Light green */
-    border-color: #66cc66;
-}
-
-.date-tile.working {
-    background-color: #e6f2ff; /* Light blue */
-    border-color: #6699ff;
-}
-
+/* Normal Tile (WFH) */
 .date-tile.normal {
-    background-color: #f7f7f7; /* Default white/light grey */
-    border-color: #e0e0e0;
+    background-color: #FFF9C4;
+    border-color: #FFEE58;
+}
+.date-tile.normal:not(.red):hover {
+    background-color: #FFFDE7;
+    border-color: #FFEB3B;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(255, 249, 196, 0.3);
 }
 
-/* Red for weekends and holidays */
+/* Leave Tile */
+.date-tile.leave {
+    background-color: #d1f7d1;
+    border-color: #4CAF50;
+}
+.date-tile.leave:not(.red):hover {
+    background-color: #e6fae6;
+    border-color: #66CC66;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
+}
+
+/* Working Tile (WFO) */
+.date-tile.working {
+    background-color: #d1e9ff;
+    border-color: #2196F3;
+}
+.date-tile.working:not(.red):hover {
+    background-color: #e6f2ff;
+    border-color: #6699FF;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+}
+
+/* Red (Weekends and Public Holidays) */
 .date-tile.red {
-    background-color: #ffe6e6; /* Light red */
+    background-color: #ffe6e6;
     border-color: #ff6666;
     color: #cc0000;
     cursor: default;
 }
 
-/* Styles for A and B values */
-.week-summary {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    padding-left: 10px; /* Space from calendar grid */
-    font-size: 0.9em;
-    color: #666;
-    text-align: center;
-}
-
-.week-summary .value {
-    font-weight: bold;
-    color: #333;
-}
-
-/* Ensure empty cells for A/B values are styled */
-.empty-summary {
-    /* No specific styling needed, just ensures grid takes space */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .calendar-container {
-        padding: 20px;
-        width: 100%;
-    }
-
-    .calendar-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    #week-days, #calendar-body {
-        grid-template-columns: repeat(7, 1fr); /* Collapse A/B columns on smaller screens */
-    }
-    
-    .week-data-header, .week-summary {
-        display: none; /* Hide A/B data on small screens, or re-think layout */
-    }
-}
-
-
-/* ---------------------------------------------- */
-
-/* Add to your existing style.css */
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between; /* Distribute items */
-    align-items: center;
-    margin-bottom: 25px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    gap: 15px; /* Space between elements in header */
-}
-
-.month-navigation {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Space between button and month/year text */
-}
-
-.nav-btn {
-    background-color: #007bff; /* A nice blue */
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 15px;
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    flex-shrink: 0; /* Prevent buttons from shrinking */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
-}
-
-.nav-btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: translateY(-1px); /* Slight lift effect */
-}
-
-.nav-btn:active {
-    background-color: #004085;
-    transform: translateY(0); /* Press effect */
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.header-controls {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* Space between office days count and reset button */
-    flex-wrap: wrap; /* Allow wrapping */
-}
-
-.control-btn {
-    background-color: #dc3545; /* Red for reset, typically for destructive actions */
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    flex-shrink: 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
-    margin-top: 10px; /* Adjust as needed - gives space below previous content on wrap */
-    margin-bottom: 5px; /* Optional: adds a little space below it too */
-}
-
-/* If you want the reset button to always be on its own line or separate below the Total Office Days,
-   and not directly next to it when screen is wide, you might adjust .header-controls flex-direction.
-   For now, this will align them side-by-side if space permits, and stack if not.
-*/
-
-
-.control-btn:hover {
-    background-color: #c82333; /* Darker red on hover */
-    transform: translateY(-1px);
-}
-
-.control-btn:active {
-    background-color: #bd2130;
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-    .calendar-header {
-        flex-direction: column; /* Stack header items vertically */
-        align-items: flex-start; /* Align stacked items to the left */
-    }
-    .month-navigation, .header-controls {
-        width: 100%; /* Make navigation and controls take full width */
-        justify-content: space-between; /* Distribute content within their full width */
-    }
-    .header-controls {
-        margin-top: 10px; /* Add some space between month navigation and controls when stacked */
-    }
-    .control-btn {
-        margin-top: 0; /* Remove top margin when elements are stacked within .header-controls */
-        width: auto; /* Allow button to shrink/grow */
-    }
-}
-
-@media (max-width: 500px) {
-    .nav-btn, .control-btn {
-        padding: 6px 12px;
-        font-size: 0.9em;
-    }
-}
-
-/* Add to your existing style.css */
-
-/* --- Optional Holiday Tile Styling --- */
+/* Optional Holiday Tile - has its own light yellow background and thick border */
 .date-tile.optional-holiday {
-    border: 3px solid #ffbf00; /* Dark yellow/amber thick border */
-    /* You might want to adjust background or text color slightly if needed,
-       but the request was specifically for a border. */
-    /* Example: background-color: #fff9e6; */
+    border: 4px solid #cc8800;
 }
-
-/* Ensure hover effect still works well with the new border */
-.date-tile.optional-holiday:not(.red):hover {
-    background-color: #fff4d1; /* Lighter yellow on hover */
-    border-color: #ffa500; /* Orange-yellow on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(255, 191, 0, 0.25); /* Yellowish shadow */
-}
-
-
-/* --- Summary Counts Box Styling --- */
-.summary-counts {
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    justify-content: center; /* Center the boxes */
-    gap: 25px; /* Space between the count boxes */
-    margin-top: 30px; /* Top margin to separate from calendar */
-    padding-top: 20px;
-    border-top: 1px solid #eee; /* Light separator line */
-}
-
-.count-box {
-    background-color: #eaf5ff; /* Light blue background for the box */
-    border: 1px solid #cce0ff; /* Matching border */
-    border-radius: 10px;
-    padding: 15px 25px;
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-    min-width: 200px; /* Ensure boxes have a minimum width */
-    flex-grow: 1; /* Allow boxes to grow and take available space */
-    max-width: 300px; /* Limit max width for larger screens */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Subtle shadow */
-    display: flex; /* Use flexbox internally for alignment */
-    justify-content: center; /* Center content within box */
-    align-items: center;
-    gap: 8px; /* Space between label and count number */
-}
-
-.count-box span {
-    color: #007bff; /* Highlight the count number */
-    font-size: 1.3em;
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 600px) {
-    .summary-counts {
-        flex-direction: column; /* Stack count boxes vertically on small screens */
-        align-items: center; /* Center them when stacked */
-        gap: 15px;
-    }
-    .count-box {
-        width: 90%; /* Make boxes almost full width */
-        max-width: none; /* Remove max-width constraint */
-        padding: 12px 20px;
-        font-size: 1em;
-    }
-}
-
-/* Add to your existing style.css */
-
-/* --- General Date Tile Layout for Text --- */
-.date-tile {
-    /* Existing styles remain */
-    display: flex; /* Make it a flex container */
-    flex-direction: column; /* Stack contents vertically */
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    padding: 5px 2px; /* Adjust padding to make space for text, was 5px */
-    line-height: 1.2; /* Adjust line height for better spacing */
-    overflow: hidden; /* Ensure text doesn't overflow */
-}
-
-/* --- Font Size Adjustments --- */
-.date-tile .date-number {
-    font-size: 1.6em; /* Make date number bigger, was 1.1em from parent */
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 2px; /* Small space between date number and first text line */
-}
-
-.week-summary .value {
-    font-size: 1.4em; /* Make A/B numbers bigger, was 0.9em from parent */
-    font-weight: bold;
-    color: #333;
-}
-
-/* --- New Text Label Styling --- */
-.date-tile .state-text {
-    font-size: 0.7em; /* Smaller font for state (WFH, Leave, WFO, Optional Holiday) */
-    font-weight: 600; /* Slightly bolder */
-    color: #555; /* Default gray for state text */
-    text-align: center;
-    line-height: 1.2;
-    padding: 0 2px; /* Small horizontal padding */
-    box-sizing: border-box; /* Include padding in element's total width/height */
-}
-
-.date-tile .holiday-name-text {
-    font-size: 0.65em; /* Even smaller for holiday names */
-    font-style: italic;
-    color: #777; /* Lighter gray for holiday names */
-    text-align: center;
-    line-height: 1.1;
-    white-space: normal; /* Allow text to wrap if too long */
-    padding: 0 2px; /* Small horizontal padding */
-    box-sizing: border-box;
-}
-
-/* Specific coloring for state text based on tile state */
-.date-tile.leave .state-text {
-    color: #4CAF50; /* Green for Leave */
-}
-.date-tile.working .state-text {
-    color: #2196F3; /* Blue for WFO */
-}
-/* For 'normal' state, default color is fine */
-
-
-/* Adjustments for red (weekend/public holiday) tiles */
-.date-tile.red .date-number,
-.date-tile.red .state-text,
-.date-tile.red .holiday-name-text {
-    color: #cc0000; /* Ensure red color applies to all text parts */
-}
-
-/* Optional Holiday specific text color (if different from default state) */
+/* Optional Holiday specific text color (now black) */
 .date-tile.optional-holiday .state-text {
-    color: #e6a700; /* Darker yellow for "Optional Holiday" text */
+    color: #333;
 }
 
 
-/* Make sure empty tiles don't show text placeholders */
-.date-tile.empty .date-number,
-.date-tile.empty .state-text,
-.date-tile.empty .holiday-name-text {
-    visibility: hidden; /* Hide text in empty cells */
+/* --- Text Label Styling --- */
+.date-tile .date-number {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 2px;
 }
 
-/* Add to your existing style.css */
-
-/* --- Background Icons for Date Tiles (Paths Corrected & Opacity Decreased) --- */
-.date-tile {
-    position: relative;
-    overflow: hidden;
-    /* Ensure existing flexbox rules (display: flex, flex-direction: column etc.) are present */
-}
-
-/* Base styling for all background icons to ensure consistency */
-.date-tile::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 65%; /* Icon size */
-    height: 65%; /* Icon size */
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.05; /* Significantly decreased opacity for readability (was 0.2) */
-    pointer-events: none; /* Make sure it doesn't interfere with clicks */
-    z-index: 0; /* Place behind text */
-}
-
-/* Specific icons based on state */
-
-/* WFH (Normal Tile) */
-.date-tile.normal::before {
-    background-image: url('images/wfh.png'); /* Corrected path */
-}
-
-/* WFO (Working Tile) */
-.date-tile.working::before {
-    background-image: url('images/wfo.png'); /* Corrected path */
-}
-
-/* Leave Tile (Regular Leave) */
-.date-tile.leave::before {
-    background-image: url('images/leave.png'); /* Corrected path */
-}
-
-/* Optional Holiday Tile (dark yellow border) - always shows the party icon */
-/* This rule must come AFTER the .date-tile.leave rule if optional-holiday.leave should have a different icon */
-.date-tile.optional-holiday::before {
-    background-image: url('images/party.png'); /* Corrected path */
-    opacity: 0.08; /* Slightly higher opacity for special days, but still subtle (was 0.25) */
-}
-
-/* Red (Weekend/Public Holiday) Tiles - ensure no icon or very subtle */
-.date-tile.red::before {
-    background-image: none !important;
-    opacity: 0;
-}
-
-/* Empty Tiles - no icon */
-.date-tile.empty::before {
-    background-image: none !important;
-    opacity: 0;
-}
-
-/* Add to your existing style.css or replace relevant sections */
-
-/* --- Normal Tile (WFH) - More Vibrant Background & Text --- */
-.date-tile.normal {
-    background-color: #ebf5f0; /* Very light, subtle blue-green tint */
-    border-color: #c9e0d4; /* Matching border */
-}
-
-.date-tile.normal:not(.red):hover {
-    background-color: #d8ebe2; /* Slightly darker hover for WFH */
-    border-color: #a9d4c1;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.date-tile.normal .state-text {
-    color: #4CAF50; /* A pleasant green for WFH text */
-}
-
-
-/* --- Leave Tile - Slightly Darker/More Vibrant Background --- */
-.date-tile.leave {
-    background-color: #d1f7d1; /* Slightly richer green (was #e6ffe6) */
-    border-color: #4CAF50; /* Matching border (was #66cc66) */
-}
-
-/* --- Working Tile (WFO) - Slightly Darker/More Vibrant Background --- */
-.date-tile.working {
-    background-color: #d1e9ff; /* Slightly richer blue (was #e6f2ff) */
-    border-color: #2196F3; /* Matching border (was #6699ff) */
-}
-
-
-/* --- Text Label Styling Adjustments (Bigger & Uppercase) --- */
 .date-tile .state-text {
-    font-size: 0.8em; /* Made text little bigger (was 0.7em) */
+    font-size: 0.8em;
     font-weight: 600;
-    text-transform: uppercase; /* NEW: All uppercase */
-    color: #555; /* Default gray, but will be overridden by state-specific colors below */
+    text-transform: uppercase;
+    color: #555;
     text-align: center;
     line-height: 1.2;
     padding: 0 2px;
     box-sizing: border-box;
 }
 
-/* Ensure these specific colors for state text are applied (from previous step) */
-.date-tile.leave .state-text {
-    color: #4CAF50; /* Green for Leave */
-}
-.date-tile.working .state-text {
-    color: #2196F3; /* Blue for WFO */
-}
-/* For 'normal' state, we explicitly set it above for WFH text */
-
-
-/* --- Other existing styles in style.css remain unchanged --- */
-/* (e.g., .date-tile .date-number, .week-summary .value font sizes are already larger from previous steps) */
-
-
-/* Add to your existing style.css or replace relevant sections */
-
-/* --- Normal Tile (WFH) - Vibrant Dark Yellow Background & Text --- */
-.date-tile.normal {
-    background-color: #ffdfa3; /* Darker Orange-Yellow border */
-    border-color: #FFA500; /* Darker Orange-Yellow border */
+.date-tile .holiday-name-text {
+    font-size: 0.65em;
+    font-style: italic;
+    color: #777;
+    text-align: center;
+    line-height: 1.1;
+    white-space: normal;
+    padding: 0 2px;
+    box-sizing: border-box;
 }
 
-.date-tile.normal:not(.red):hover {
-    background-color: #FFC107; /* Slightly darker hover for WFH */
-    border-color: #E09000; /* Darker border on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(255, 218, 68, 0.25); /* Yellowish shadow */
+/* Ensure red color applies to all text parts for red tiles */
+.date-tile.red .date-number,
+.date-tile.red .state-text,
+.date-tile.red .holiday-name-text {
+    color: #cc0000;
 }
 
-.date-tile.normal .state-text {
-    color: #a47b00; /* Dark text for WFH on yellow background */
+/* Make sure empty tiles don't show text placeholders */
+.date-tile.empty .date-number,
+.date-tile.empty .state-text,
+.date-tile.empty .holiday-name-text {
+    visibility: hidden;
 }
 
-/* --- Optional Holiday Tile Styling - Thicker Border --- */
-.date-tile.optional-holiday {
-    border: 4px solid #00c36f; /* Thicker dark yellow/amber border (was 3px) */
-    /* Ensure other optional-holiday styles (like opacity for icon) remain */
+/* --- Background Icons for Date Tiles --- */
+.date-tile::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 65%;
+    height: 65%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
 }
 
-/* Ensure hover effect still works well with the new border */
-.date-tile.optional-holiday:not(.red):hover {
-    border-color: #00864c; /* Orange-yellow on hover (can keep previous) */
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(255, 191, 0, 0.25);
+.date-tile.normal::before {
+    background-image: url('images/wfh.png');
+}
+.date-tile.working::before {
+    background-image: url('images/wfo.png');
+}
+.date-tile.leave::before {
+    background-image: url('images/leave.png');
+}
+.date-tile.optional-holiday::before {
+    background-image: url('images/party.png');
+    opacity: 0.08;
+}
+
+.date-tile.red::before,
+.date-tile.empty::before {
+    background-image: none !important;
+    opacity: 0;
 }
 
 
-/* --- Other existing styles in style.css remain unchanged --- */
-/* (e.g., .date-tile.leave, .date-tile.working background colors, .state-text font size/uppercase) */
+/* --- Weekly A and B Values --- */
+.week-summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding-left: 10px;
+    font-size: 0.9em;
+    color: #666;
+    text-align: center;
+}
+
+.week-summary .value {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* --- Calendar Legend Styling --- */
+.calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px 30px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.legend-minitile {
+    width: 25px;
+    height: 25px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    flex-shrink: 0;
+}
+
+/* --- Minitile Colors and Borders (Mirroring Date Tiles) --- */
+
+/* Red (Weekend / Public Holiday) */
+.legend-minitile.red {
+    background-color: #ffe6e6;
+    border-color: #ff6666;
+}
+
+/* WFH (Normal Day) */
+.legend-minitile.normal {
+    background-color: #FFF9C4;
+    border-color: #FFEE58;
+}
+
+/* Leave */
+.legend-minitile.leave {
+    background-color: #d1f7d1;
+    border-color: #4CAF50;
+}
+
+/* WFO (Working Day) */
+.legend-minitile.working {
+    background-color: #d1e9ff;
+    border-color: #2196F3;
+}
+
+/* Optional Holiday (yellow border, its background comes from normal/leave/working) */
+.legend-minitile.optional-holiday {
+    border: 4px solid #cc8800;
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .top-controls-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+    .calendar-container {
+        padding: 20px;
+        width: 100%;
+    }
+    .calendar-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-bottom: 10px;
+    }
+    .month-navigation {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+    .calendar-header h2 {
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    .metrics-display-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    .metric-box {
+        width: 90%;
+        max-width: none;
+    }
+
+    #week-days, #calendar-body {
+        grid-template-columns: repeat(7, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .summary-counts {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    .count-box {
+        width: 90%;
+        max-width: none;
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+    .calendar-legend {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding-left: 10px;
+    }
+}
+
+@media (max-width: 500px) {
+    .nav-arrow-btn, #reset-month-data-btn {
+        padding: 6px 12px;
+        font-size: 0.9em;
+    }
+}

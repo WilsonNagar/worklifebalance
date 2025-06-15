@@ -1,6 +1,6 @@
-// js/calendarGenerator.js (UPDATED getTileTexts HELPER FUNCTION & call in renderCalendar)
+// js/calendarGenerator.js (UPDATED getTileTexts HELPER FUNCTION)
 
-const calendarGenerator = (function() {
+const calendarGenerator = (function () {
     const calendarBody = document.getElementById('calendar-body');
     const currentMonthYearHeader = document.getElementById('current-month-year');
 
@@ -12,38 +12,36 @@ const calendarGenerator = (function() {
      * @param {string} state - The current state of the tile ('normal', 'leave', 'working').
      * @param {string|undefined} publicHolidayName - The name of the public holiday, or undefined.
      * @param {string|undefined} optionalHolidayName - The name of the optional holiday, or undefined.
-     * @param {boolean} isWeekend - True if the date is a Saturday or Sunday. // NEW PARAMETER
+     * @param {boolean} isWeekend - True if the date is a Saturday or Sunday.
      * @returns {{stateText: string, holidayNameText: string}} Object with the two text lines.
      */
-    function getTileTexts(state, publicHolidayName, optionalHolidayName, isWeekend) { // NEW: isWeekend parameter
+    function getTileTexts(state, publicHolidayName, optionalHolidayName, isWeekend) {
         let stateText = '';
         let holidayNameText = '';
 
         if (publicHolidayName) {
-            // Public holidays take highest precedence: only show their name.
             holidayNameText = publicHolidayName;
-            stateText = ''; 
-        } else if (isWeekend) { // NEW: Handle regular weekends (not public holidays)
+            stateText = '';
+        } else if (isWeekend) {
             stateText = 'WEEKEND';
-            holidayNameText = ''; // Regular weekends don't have a specific holiday name
+            holidayNameText = '';
         } else if (optionalHolidayName) {
-            // Optional Holiday specific logic (if not a public holiday and not a regular weekend)
+            // CORRECTED TYPO: holidayNameText instead of holidayNameName
             if (state === 'normal') {
                 stateText = 'WFH';
-                holidayNameName = optionalHolidayName;
+                holidayNameText = optionalHolidayName; // Corrected line
             } else if (state === 'leave') {
-                stateText = 'OPTIONAL HOLIDAY'; // Changed to uppercase for consistency
+                stateText = 'OH';
                 holidayNameText = optionalHolidayName;
             } else if (state === 'working') {
                 stateText = 'WFO';
                 holidayNameText = optionalHolidayName;
             }
         } else {
-            // Regular weekdays (Mon-Fri, not a public or optional holiday)
             if (state === 'normal') {
                 stateText = 'WFH';
             } else if (state === 'leave') {
-                stateText = 'LEAVE'; // Changed to uppercase for consistency
+                stateText = 'LEAVE';
             } else if (state === 'working') {
                 stateText = 'WFO';
             }
@@ -52,10 +50,7 @@ const calendarGenerator = (function() {
         return { stateText, holidayNameText };
     }
 
-    /**
-     * Renders the calendar for the current month and year.
-     * ... (rest of the renderCalendar function) ...
-     */
+    // --- The rest of the calendarGenerator.js file (renderCalendar, nextMonth, prevMonth, getCurrentMonthYear, and return statement) remains unchanged ---
     function renderCalendar(onTileRenderedCallback) {
         calendarBody.innerHTML = ''; // Clear previous calendar
 
@@ -81,7 +76,7 @@ const calendarGenerator = (function() {
                 const cell = document.createElement('div');
 
                 if (j < 7) { // Date tile column
-                    const overallDateCellIndex = (i * 7) + j; 
+                    const overallDateCellIndex = (i * 7) + j;
 
                     if (overallDateCellIndex < firstDayGridIndex || dayOfMonth > daysInMonth) {
                         cell.classList.add('date-tile', 'empty');
@@ -100,31 +95,30 @@ const calendarGenerator = (function() {
 
                         const publicHolidayName = dataManager.isPublicHoliday(dateString);
                         const optionalHolidayName = dataManager.isOptionalHoliday(dateString);
-                        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6); // Determine if it's a weekend
+                        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
 
                         let state = dataManager.getDateState(dateString);
 
-                        if (isWeekend || publicHolidayName) { // If public holiday or weekend, it's red
+                        if (isWeekend || publicHolidayName) {
                             cell.classList.add('red');
                         } else {
                             cell.classList.add(state);
                         }
-                        
+
                         if (optionalHolidayName) {
                             cell.classList.add('optional-holiday');
                         }
 
-                        // UPDATED: Pass isWeekend to getTileTexts
-                        const texts = getTileTexts(state, publicHolidayName, optionalHolidayName, isWeekend);
+                        const texts = getTileTexts(state, publicHolidayName, optionalHolidayName, isWeekend); // This line is correct
 
                         cell.innerHTML = `
-                            <span class="date-number">${dayOfMonth}</span>
-                            <span class="state-text">${texts.stateText}</span>
-                            <span class="holiday-name-text">${texts.holidayNameText}</span>
-                        `;
+            <span class="date-number">${dayOfMonth}</span>
+            <span class="state-text">${texts.stateText}</span>
+            <span class="holiday-name-text">${texts.holidayNameText}</span>
+        `;
 
                         if (!cell.classList.contains('red') && onTileRenderedCallback) {
-                             onTileRenderedCallback(cell);
+                            onTileRenderedCallback(cell);
                         }
                         dayOfMonth++;
                         rowHasActualDate = true;
@@ -142,12 +136,12 @@ const calendarGenerator = (function() {
                 }
                 calendarBody.appendChild(cell);
             }
-            
+
             if (dayOfMonth > daysInMonth && !rowHasActualDate) {
-                break; 
+                break;
             }
             if (rowHasActualDate || (i === 0 && firstDayGridIndex > 0) || (dayOfMonth <= daysInMonth)) {
-                 weekCounter++;
+                weekCounter++;
             }
         }
     }

@@ -4,42 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Calendar</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/metrics.css">
+    <link rel="stylesheet" href="css/calendar-grid.css">
+    <link rel="stylesheet" href="css/date-tiles.css">
+    <link rel="stylesheet" href="css/legend.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/sidebar.css"> </head>
 <body>
     <div class="calendar-container">
-        <div class="calendar-header">
-            <div class="month-navigation">
-                <button id="prev-month-btn" class="nav-btn">&lt;</button>
-                <h2 id="current-month-year"></h2>
-                <button id="next-month-btn" class="nav-btn">&gt;</button>
-            </div>
-            <div class="header-controls">
-                <div id="total-office-days">Total Office Days: <span id="office-days-count">0</span></div>
-                <button id="reset-month-data-btn" class="control-btn">Reset Month Data</button>
-            </div>
-        </div>
-        <div id="week-days">
-            <div class="day-name">Mon</div>
-            <div class="day-name">Tue</div>
-            <div class="day-name">Wed</div>
-            <div class="day-name">Thu</div>
-            <div class="day-name">Fri</div>
-            <div class="day-name">Sat</div>
-            <div class="day-name">Sun</div>
-            <div class="week-data-header">Expected Working Days</div>
-            <div class="week-data-header">Office Days</div>
-        </div>
-        <div id="calendar-body">
+        <div class="left-sidebar">
+            <button id="reset-month-data-btn" class="sidebar-btn">Reset Month Data</button>
+
+            <div class="metrics-display-group">
+                <div id="total-office-days" class="metric-box">Total Office Days: <span id="office-days-count">0</span></div>
+                <div class="compliance-status metric-box">
+                    <span class="compliance-icon"></span>
+                    <span class="compliance-text"></span>
+                </div>
+                <div class="count-box metric-box">
+                    Leaves Taken: <span id="leaves-taken-count">0</span>
+                </div>
+                <div class="count-box metric-box">
+                    Optional Leaves Taken: <span id="optional-leaves-taken-count">0</span>
+                </div>
             </div>
 
-        <div class="summary-counts">
-            <div class="count-box">
-                Leaves Taken: <span id="leaves-taken-count">0</span>
+            <div class="calendar-legend">
+                <div class="legend-item">
+                    <div class="legend-minitile red"></div>
+                    <span>Weekend / Public Holiday</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-minitile normal"></div>
+                    <span>Work From Home</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-minitile leave"></div>
+                    <span>Leave</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-minitile working"></div>
+                    <span>Work From Office</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-minitile optional-holiday normal"></div>
+                    <span>Optional Holiday</span>
+                </div>
             </div>
-            <div class="count-box">
-                Optional Leaves Taken: <span id="optional-leaves-taken-count">0</span>
+        </div>
+
+        <div class="main-calendar-area">
+            <div class="calendar-header">
+                <div class="month-navigation">
+                    <button id="prev-month-btn" class="nav-arrow-btn">&lt;</button>
+                    <h2 id="current-month-year"></h2>
+                    <button id="next-month-btn" class="nav-arrow-btn">&gt;</button>
+                </div>
             </div>
+
+            <div id="week-days">
+                <div class="day-name">Mon</div>
+                <div class="day-name">Tue</div>
+                <div class="day-name">Wed</div>
+                <div class="day-name">Thu</div>
+                <div class="day-name">Fri</div>
+                <div class="day-name">Sat</div>
+                <div class="day-name">Sun</div>
+                <div class="week-data-header">Expected Working Days</div>
+                <div class="week-data-header">Office Days</div>
+            </div>
+            <div id="calendar-body">
+                </div>
         </div>
     </div>
     

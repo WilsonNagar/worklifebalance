@@ -3,9 +3,12 @@
 const uiUpdater = (function() {
     const totalOfficeDaysSpan = document.getElementById('office-days-count');
     const calendarBody = document.getElementById('calendar-body');
-    // NEW: Get references to the new count spans
     const leavesTakenCountSpan = document.getElementById('leaves-taken-count');
     const optionalLeavesTakenCountSpan = document.getElementById('optional-leaves-taken-count');
+
+    const complianceStatusDiv = document.querySelector('.compliance-status');
+    const complianceIconSpan = complianceStatusDiv.querySelector('.compliance-icon'); // Icon handled by CSS
+    const complianceTextSpan = complianceStatusDiv.querySelector('.compliance-text');
 
 
     /**
@@ -21,9 +24,6 @@ const uiUpdater = (function() {
      * @param {Array<object>} weeklyData - An array of objects, each containing { weekIndex, A, B }.
      */
     function updateWeeklyABValues(weeklyData) {
-        // Ensure that the calendarGenerator creates the .week-summary-a and .week-summary-b elements
-        // with data-week-index. uiUpdater just fills their values.
-
         weeklyData.forEach(weekData => {
             const weekSummaryAElement = calendarBody.querySelector(`.week-summary-a[data-week-index="${weekData.weekIndex}"]`);
             const weekSummaryBElement = calendarBody.querySelector(`.week-summary-b[data-week-index="${weekData.weekIndex}"]`);
@@ -38,7 +38,7 @@ const uiUpdater = (function() {
     }
 
     /**
-     * NEW: Updates the count of all leaves taken.
+     * Updates the count of all leaves taken.
      * @param {number} count - The total number of leaves taken.
      */
     function updateLeavesTakenCount(count) {
@@ -46,18 +46,35 @@ const uiUpdater = (function() {
     }
 
     /**
-     * NEW: Updates the count of optional leaves taken.
+     * Updates the count of optional leaves taken.
      * @param {number} count - The total number of optional leaves taken.
      */
     function updateOptionalLeavesTakenCount(count) {
         optionalLeavesTakenCountSpan.textContent = count;
     }
 
+    /**
+     * Updates the compliance status based on the total C value.
+     * @param {number} totalC - The total C value (Total Office Days).
+     */
+    function updateComplianceStatus(totalC) {
+        if (totalC === 0) {
+            complianceStatusDiv.classList.remove('non-compliant');
+            complianceStatusDiv.classList.add('compliant');
+            complianceTextSpan.textContent = 'COMPLIANT'; // Changed text
+        } else {
+            complianceStatusDiv.classList.remove('compliant');
+            complianceStatusDiv.classList.add('non-compliant');
+            complianceTextSpan.textContent = 'NON COMPLIANT'; // Changed text
+        }
+    }
+
 
     return {
         updateCValue,
         updateWeeklyABValues,
-        updateLeavesTakenCount, // NEW: Expose new function
-        updateOptionalLeavesTakenCount // NEW: Expose new function
+        updateLeavesTakenCount,
+        updateOptionalLeavesTakenCount,
+        updateComplianceStatus
     };
 })();
