@@ -32,7 +32,6 @@ const calendarGenerator = (function() {
         let weekCounter = 0; // To uniquely identify weeks for A/B values
 
         // Loop for up to 6 potential weeks (rows) in a month
-        // A standard calendar can span 4, 5, or 6 weeks depending on month/start day.
         for (let i = 0; i < 6; i++) {
             let rowHasActualDate = false; // Flag to check if this grid row contains any actual date tiles
 
@@ -58,18 +57,27 @@ const calendarGenerator = (function() {
                         cell.dataset.date = dateString; // Store date string for easy access
 
                         const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6); // 0 = Sunday, 6 = Saturday
-                        const isHoliday = dataManager.isPublicHoliday(dateString);
+                        const isPublicHoliday = dataManager.isPublicHoliday(dateString);
+                        const isOptionalHoliday = dataManager.isOptionalHoliday(dateString); // NEW: Check for optional holiday
 
-                        if (isWeekend || isHoliday) {
+                        // Apply red class for weekends and public holidays (not clickable)
+                        if (isWeekend || isPublicHoliday) {
                             cell.classList.add('red');
                         } else {
+                            // For regular days and optional holidays, apply existing state
                             const state = dataManager.getDateState(dateString);
                             cell.classList.add(state); // 'normal', 'leave', 'working'
                         }
                         
-                        // Call the callback for event listeners
-                        if (onTileRenderedCallback) {
-                            onTileRenderedCallback(cell);
+                        // NEW: Apply optional-holiday class if it's an optional holiday
+                        if (isOptionalHoliday) {
+                            cell.classList.add('optional-holiday');
+                        }
+
+                        // Call the callback for event listeners (only for clickable tiles)
+                        // Important: Red tiles are not clickable, so only attach listener if not red.
+                        if (!cell.classList.contains('red') && onTileRenderedCallback) {
+                             onTileRenderedCallback(cell);
                         }
                         dayOfMonth++; // Move to the next day for the next cell
                         rowHasActualDate = true; // Mark that this row contains at least one actual date
@@ -96,15 +104,13 @@ const calendarGenerator = (function() {
             }
             // Increment week counter only if this row contained at least one actual date
             // or if it was a row with leading empty days that would contain dates later in the week.
-            // A more robust check might be `if (dayOfMonth <= daysInMonth || rowHasActualDate)`
-            // but for simplicity, we increment for every full 9-column row that isn't entirely empty at the end.
             if (rowHasActualDate || (i === 0 && firstDayGridIndex > 0) || (dayOfMonth <= daysInMonth)) {
                  weekCounter++;
             }
         }
     }
 
-    // ... rest of the calendarGenerator functions (nextMonth, prevMonth, getCurrentMonthYear) remain the same
+    // --- The following functions remain unchanged ---
     function nextMonth() {
         currentMonth++;
         if (currentMonth > 11) {

@@ -1,14 +1,14 @@
 // js/dataManager.js
 
-// import { publicHolidays } from './publicHolidays.js'; // Import the publicHolidays object
+// import { publicHolidays } from './publicHolidays.js';
+// import { optionalHolidays } from './optionalHolidays.js'; // NEW: Import optionalHolidays
 
 const dataManager = (function() {
     // Key for storing data in localStorage
     const LOCAL_STORAGE_KEY = 'calendarDateStates';
 
     // Stores the state of each date. Key: 'YYYY-MM-DD', Value: 'normal', 'leave', 'working'
-    let dateStates = {}; // Changed from const to let to allow reassignment on load
-    // let publicHolidays = {}; // Placeholder for public holidays, will be populated from the imported module
+    let dateStates = {};
 
     /**
      * Initializes dateStates by attempting to load from localStorage.
@@ -64,8 +64,16 @@ const dataManager = (function() {
      * @returns {boolean} True if it's a public holiday, false otherwise.
      */
     function isPublicHoliday(dateString) {
-        // Use the imported publicHolidays object
         return publicHolidays[dateString] === true;
+    }
+
+    /**
+     * NEW: Checks if a given date is an optional holiday.
+     * @param {string} dateString - The date in 'YYYY-MM-DD' format.
+     * @returns {boolean} True if it's an optional holiday, false otherwise.
+     */
+    function isOptionalHoliday(dateString) {
+        return optionalHolidays[dateString] === true;
     }
 
     /**
@@ -95,7 +103,8 @@ const dataManager = (function() {
         getDateState,
         setDateState,
         isPublicHoliday,
+        isOptionalHoliday, // NEW: Expose the new function
         getAllDateStates,
-        clearMonthData // Expose the new clearMonthData function
+        clearMonthData
     };
 })();

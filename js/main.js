@@ -2,14 +2,23 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     /**
-     * This function is the central callback for when a date tile's state changes.
+     * This function is the central callback for when a date tile's state changes,
+     * or when the month changes, or when data is reset.
      * It triggers recalculations and UI updates across the calendar.
      */
     function onDateStateChange() {
         const currentMonthYear = calendarGenerator.getCurrentMonthYear();
         const calculationResults = calculationEngine.recalculateAll(currentMonthYear);
+        
+        // Update main C value
         uiUpdater.updateCValue(calculationResults.totalC);
+        
+        // Update weekly A and B values
         uiUpdater.updateWeeklyABValues(calculationResults.weeklyData);
+
+        // NEW: Update the new leaves taken counts
+        uiUpdater.updateLeavesTakenCount(calculationResults.totalLeavesTaken);
+        uiUpdater.updateOptionalLeavesTakenCount(calculationResults.totalOptionalLeavesTaken);
     }
 
     // Initial rendering of the calendar

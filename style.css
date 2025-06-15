@@ -274,3 +274,72 @@ body {
         font-size: 0.9em;
     }
 }
+
+/* Add to your existing style.css */
+
+/* --- Optional Holiday Tile Styling --- */
+.date-tile.optional-holiday {
+    border: 3px solid #ffbf00; /* Dark yellow/amber thick border */
+    /* You might want to adjust background or text color slightly if needed,
+       but the request was specifically for a border. */
+    /* Example: background-color: #fff9e6; */
+}
+
+/* Ensure hover effect still works well with the new border */
+.date-tile.optional-holiday:not(.red):hover {
+    background-color: #fff4d1; /* Lighter yellow on hover */
+    border-color: #ffa500; /* Orange-yellow on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(255, 191, 0, 0.25); /* Yellowish shadow */
+}
+
+
+/* --- Summary Counts Box Styling --- */
+.summary-counts {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: center; /* Center the boxes */
+    gap: 25px; /* Space between the count boxes */
+    margin-top: 30px; /* Top margin to separate from calendar */
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Light separator line */
+}
+
+.count-box {
+    background-color: #eaf5ff; /* Light blue background for the box */
+    border: 1px solid #cce0ff; /* Matching border */
+    border-radius: 10px;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    min-width: 200px; /* Ensure boxes have a minimum width */
+    flex-grow: 1; /* Allow boxes to grow and take available space */
+    max-width: 300px; /* Limit max width for larger screens */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+    display: flex; /* Use flexbox internally for alignment */
+    justify-content: center; /* Center content within box */
+    align-items: center;
+    gap: 8px; /* Space between label and count number */
+}
+
+.count-box span {
+    color: #007bff; /* Highlight the count number */
+    font-size: 1.3em;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .summary-counts {
+        flex-direction: column; /* Stack count boxes vertically on small screens */
+        align-items: center; /* Center them when stacked */
+        gap: 15px;
+    }
+    .count-box {
+        width: 90%; /* Make boxes almost full width */
+        max-width: none; /* Remove max-width constraint */
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+}
