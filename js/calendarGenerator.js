@@ -1,4 +1,4 @@
-// js/calendarGenerator.js (UPDATED renderCalendar FUNCTION)
+// js/calendarGenerator.js (UPDATED getTileTexts HELPER FUNCTION & call in renderCalendar)
 
 const calendarGenerator = (function() {
     const calendarBody = document.getElementById('calendar-body');
@@ -12,46 +12,49 @@ const calendarGenerator = (function() {
      * @param {string} state - The current state of the tile ('normal', 'leave', 'working').
      * @param {string|undefined} publicHolidayName - The name of the public holiday, or undefined.
      * @param {string|undefined} optionalHolidayName - The name of the optional holiday, or undefined.
+     * @param {boolean} isWeekend - True if the date is a Saturday or Sunday. // NEW PARAMETER
      * @returns {{stateText: string, holidayNameText: string}} Object with the two text lines.
      */
-    function getTileTexts(state, publicHolidayName, optionalHolidayName) {
+    function getTileTexts(state, publicHolidayName, optionalHolidayName, isWeekend) { // NEW: isWeekend parameter
         let stateText = '';
         let holidayNameText = '';
 
         if (publicHolidayName) {
-            holidayNameText = publicHolidayName; // Public holidays always show their name
-            stateText = ''; // No WFO/WFH/Leave text for public holidays
+            // Public holidays take highest precedence: only show their name.
+            holidayNameText = publicHolidayName;
+            stateText = ''; 
+        } else if (isWeekend) { // NEW: Handle regular weekends (not public holidays)
+            stateText = 'WEEKEND';
+            holidayNameText = ''; // Regular weekends don't have a specific holiday name
         } else if (optionalHolidayName) {
-            // Optional Holiday specific logic
-            if (state === 'leave') {
-                stateText = 'Optional Holiday'; // "Optional Holiday" for optional leaves
-                holidayNameText = optionalHolidayName; // And its name
+            // Optional Holiday specific logic (if not a public holiday and not a regular weekend)
+            if (state === 'normal') {
+                stateText = 'WFH';
+                holidayNameName = optionalHolidayName;
+            } else if (state === 'leave') {
+                stateText = 'OPTIONAL HOLIDAY'; // Changed to uppercase for consistency
+                holidayNameText = optionalHolidayName;
             } else if (state === 'working') {
-                stateText = 'WFO'; // "WFO" if optional holiday is working
-                holidayNameText = optionalHolidayName; // Still show name
-            } else { // Normal or other states for optional holiday
-                stateText = ''; // Default empty for normal optional holiday
-                holidayNameText = optionalHolidayName; // Just show its name
+                stateText = 'WFO';
+                holidayNameText = optionalHolidayName;
             }
         } else {
-            // Regular days (not public/optional holidays)
+            // Regular weekdays (Mon-Fri, not a public or optional holiday)
             if (state === 'normal') {
-                stateText = 'WFH'; // "WFH" for normal working days
+                stateText = 'WFH';
             } else if (state === 'leave') {
-                stateText = 'Leave'; // "Leave" for regular leaves
+                stateText = 'LEAVE'; // Changed to uppercase for consistency
             } else if (state === 'working') {
-                stateText = 'WFO'; // "WFO" for regular working days
+                stateText = 'WFO';
             }
         }
 
         return { stateText, holidayNameText };
     }
 
-
     /**
      * Renders the calendar for the current month and year.
-     * @param {function} onTileRenderedCallback - Callback function to run after each tile is rendered,
-     * useful for attaching event listeners.
+     * ... (rest of the renderCalendar function) ...
      */
     function renderCalendar(onTileRenderedCallback) {
         calendarBody.innerHTML = ''; // Clear previous calendar
@@ -82,7 +85,6 @@ const calendarGenerator = (function() {
 
                     if (overallDateCellIndex < firstDayGridIndex || dayOfMonth > daysInMonth) {
                         cell.classList.add('date-tile', 'empty');
-                        // Add empty placeholders for text even in empty cells for consistent structure
                         cell.innerHTML = `
                             <span class="date-number"></span>
                             <span class="state-text"></span>
@@ -94,37 +96,33 @@ const calendarGenerator = (function() {
                         const dayOfWeek = date.getDay();
 
                         cell.classList.add('date-tile');
-                        cell.dataset.date = dateString; // Store date string
+                        cell.dataset.date = dateString;
 
-                        const publicHolidayName = dataManager.isPublicHoliday(dateString); // Now returns name or undefined
-                        const optionalHolidayName = dataManager.isOptionalHoliday(dateString); // Now returns name or undefined
+                        const publicHolidayName = dataManager.isPublicHoliday(dateString);
+                        const optionalHolidayName = dataManager.isOptionalHoliday(dateString);
+                        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6); // Determine if it's a weekend
 
-                        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
-                        
-                        let state = dataManager.getDateState(dateString); // Get stored state
+                        let state = dataManager.getDateState(dateString);
 
-                        // Determine classes and text based on holiday status and state
-                        if (isWeekend || publicHolidayName) { // If public holiday, it takes precedence for 'red'
-                            cell.classList.add('red'); // Non-clickable
+                        if (isWeekend || publicHolidayName) { // If public holiday or weekend, it's red
+                            cell.classList.add('red');
                         } else {
-                            cell.classList.add(state); // Apply normal/leave/working class
+                            cell.classList.add(state);
                         }
                         
                         if (optionalHolidayName) {
-                            cell.classList.add('optional-holiday'); // Apply yellow border if optional
+                            cell.classList.add('optional-holiday');
                         }
 
-                        // Get text contents based on logic
-                        const texts = getTileTexts(state, publicHolidayName, optionalHolidayName);
+                        // UPDATED: Pass isWeekend to getTileTexts
+                        const texts = getTileTexts(state, publicHolidayName, optionalHolidayName, isWeekend);
 
-                        // Populate the tile with date number and new text spans
                         cell.innerHTML = `
                             <span class="date-number">${dayOfMonth}</span>
                             <span class="state-text">${texts.stateText}</span>
                             <span class="holiday-name-text">${texts.holidayNameText}</span>
                         `;
 
-                        // Attach event listener only if not 'red'
                         if (!cell.classList.contains('red') && onTileRenderedCallback) {
                              onTileRenderedCallback(cell);
                         }
