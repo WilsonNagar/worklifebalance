@@ -17,15 +17,15 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
+
     - name: Configure Pages
       uses: actions/configure-pages@v3
-    
+
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
+      uses: actions/upload-pages-artifact@v2  # Updated to v2
       with:
         path: .  # directory with your static files (current directory in this case)
 
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v4
+      uses: actions/deploy-pages@v5  # Updated to v5
