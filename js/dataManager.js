@@ -1,7 +1,7 @@
 // js/dataManager.js
 
 // import { publicHolidays } from './publicHolidays.js';
-// import { optionalHolidays } from './optionalHolidays.js'; // NEW: Import optionalHolidays
+// import { optionalHolidays } from './optionalHolidays.js';
 
 const dataManager = (function() {
     // Key for storing data in localStorage
@@ -59,21 +59,21 @@ const dataManager = (function() {
     }
 
     /**
-     * Checks if a given date is a public holiday.
+     * UPDATED: Checks if a given date is a public holiday and returns its name if it is.
      * @param {string} dateString - The date in 'YYYY-MM-DD' format.
-     * @returns {boolean} True if it's a public holiday, false otherwise.
+     * @returns {string|undefined} The name of the public holiday, or undefined if not a public holiday.
      */
     function isPublicHoliday(dateString) {
-        return publicHolidays[dateString] === true;
+        return publicHolidays[dateString]; // Returns the string name or undefined
     }
 
     /**
-     * NEW: Checks if a given date is an optional holiday.
+     * UPDATED: Checks if a given date is an optional holiday and returns its name if it is.
      * @param {string} dateString - The date in 'YYYY-MM-DD' format.
-     * @returns {boolean} True if it's an optional holiday, false otherwise.
+     * @returns {string|undefined} The name of the optional holiday, or undefined if not an optional holiday.
      */
     function isOptionalHoliday(dateString) {
-        return optionalHolidays[dateString] === true;
+        return optionalHolidays[dateString]; // Returns the string name or undefined
     }
 
     /**
@@ -102,8 +102,8 @@ const dataManager = (function() {
     return {
         getDateState,
         setDateState,
-        isPublicHoliday,
-        isOptionalHoliday, // NEW: Expose the new function
+        isPublicHoliday, // Now returns name or undefined
+        isOptionalHoliday, // Now returns name or undefined
         getAllDateStates,
         clearMonthData
     };

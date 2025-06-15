@@ -8,6 +8,47 @@ const calendarGenerator = (function() {
     let currentYear = new Date().getFullYear();
 
     /**
+     * Helper function to get the state/holiday text for a tile.
+     * @param {string} state - The current state of the tile ('normal', 'leave', 'working').
+     * @param {string|undefined} publicHolidayName - The name of the public holiday, or undefined.
+     * @param {string|undefined} optionalHolidayName - The name of the optional holiday, or undefined.
+     * @returns {{stateText: string, holidayNameText: string}} Object with the two text lines.
+     */
+    function getTileTexts(state, publicHolidayName, optionalHolidayName) {
+        let stateText = '';
+        let holidayNameText = '';
+
+        if (publicHolidayName) {
+            holidayNameText = publicHolidayName; // Public holidays always show their name
+            stateText = ''; // No WFO/WFH/Leave text for public holidays
+        } else if (optionalHolidayName) {
+            // Optional Holiday specific logic
+            if (state === 'leave') {
+                stateText = 'Optional Holiday'; // "Optional Holiday" for optional leaves
+                holidayNameText = optionalHolidayName; // And its name
+            } else if (state === 'working') {
+                stateText = 'WFO'; // "WFO" if optional holiday is working
+                holidayNameText = optionalHolidayName; // Still show name
+            } else { // Normal or other states for optional holiday
+                stateText = ''; // Default empty for normal optional holiday
+                holidayNameText = optionalHolidayName; // Just show its name
+            }
+        } else {
+            // Regular days (not public/optional holidays)
+            if (state === 'normal') {
+                stateText = 'WFH'; // "WFH" for normal working days
+            } else if (state === 'leave') {
+                stateText = 'Leave'; // "Leave" for regular leaves
+            } else if (state === 'working') {
+                stateText = 'WFO'; // "WFO" for regular working days
+            }
+        }
+
+        return { stateText, holidayNameText };
+    }
+
+
+    /**
      * Renders the calendar for the current month and year.
      * @param {function} onTileRenderedCallback - Callback function to run after each tile is rendered,
      * useful for attaching event listeners.
@@ -18,92 +59,95 @@ const calendarGenerator = (function() {
         const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-        // Calculate the starting day of the week (0 for Monday, 6 for Sunday)
-        let firstDayGridIndex = firstDayOfMonth.getDay(); // 0=Sunday, 1=Monday...
-        if (firstDayGridIndex === 0) { // If Sunday, it's the 6th position (index 6) in our Mon-start week
+        let firstDayGridIndex = firstDayOfMonth.getDay();
+        if (firstDayGridIndex === 0) {
             firstDayGridIndex = 6;
-        } else { // For Mon-Sat, adjust to be 0-indexed for Monday
+        } else {
             firstDayGridIndex--;
         }
 
         currentMonthYearHeader.textContent = `${firstDayOfMonth.toLocaleString('default', { month: 'long' })} ${currentYear}`;
 
-        let dayOfMonth = 1; // Tracks the current day number of the month being placed
-        let weekCounter = 0; // To uniquely identify weeks for A/B values
+        let dayOfMonth = 1;
+        let weekCounter = 0;
 
-        // Loop for up to 6 potential weeks (rows) in a month
         for (let i = 0; i < 6; i++) {
-            let rowHasActualDate = false; // Flag to check if this grid row contains any actual date tiles
+            let rowHasActualDate = false;
 
-            // Loop for 7 days + 2 summary columns in each grid row (total 9 columns)
             for (let j = 0; j < 9; j++) {
                 const cell = document.createElement('div');
 
-                if (j < 7) { // This is a date tile column (first 7 columns)
-                    // Calculate the overall position in the grid if it were just date cells
+                if (j < 7) { // Date tile column
                     const overallDateCellIndex = (i * 7) + j; 
 
-                    // Check if this position is before the first day of the month
-                    // OR if we've already placed all days of the month
                     if (overallDateCellIndex < firstDayGridIndex || dayOfMonth > daysInMonth) {
                         cell.classList.add('date-tile', 'empty');
-                    } else { // This is an actual date cell
+                        // Add empty placeholders for text even in empty cells for consistent structure
+                        cell.innerHTML = `
+                            <span class="date-number"></span>
+                            <span class="state-text"></span>
+                            <span class="holiday-name-text"></span>
+                        `;
+                    } else { // Actual date cell
                         const date = new Date(currentYear, currentMonth, dayOfMonth);
                         const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(dayOfMonth).padStart(2, '0')}`;
-                        const dayOfWeek = date.getDay(); // 0=Sunday, 1=Monday...
+                        const dayOfWeek = date.getDay();
 
                         cell.classList.add('date-tile');
-                        cell.textContent = dayOfMonth;
-                        cell.dataset.date = dateString; // Store date string for easy access
+                        cell.dataset.date = dateString; // Store date string
 
-                        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6); // 0 = Sunday, 6 = Saturday
-                        const isPublicHoliday = dataManager.isPublicHoliday(dateString);
-                        const isOptionalHoliday = dataManager.isOptionalHoliday(dateString); // NEW: Check for optional holiday
+                        const publicHolidayName = dataManager.isPublicHoliday(dateString); // Now returns name or undefined
+                        const optionalHolidayName = dataManager.isOptionalHoliday(dateString); // Now returns name or undefined
 
-                        // Apply red class for weekends and public holidays (not clickable)
-                        if (isWeekend || isPublicHoliday) {
-                            cell.classList.add('red');
+                        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                        
+                        let state = dataManager.getDateState(dateString); // Get stored state
+
+                        // Determine classes and text based on holiday status and state
+                        if (isWeekend || publicHolidayName) { // If public holiday, it takes precedence for 'red'
+                            cell.classList.add('red'); // Non-clickable
                         } else {
-                            // For regular days and optional holidays, apply existing state
-                            const state = dataManager.getDateState(dateString);
-                            cell.classList.add(state); // 'normal', 'leave', 'working'
+                            cell.classList.add(state); // Apply normal/leave/working class
                         }
                         
-                        // NEW: Apply optional-holiday class if it's an optional holiday
-                        if (isOptionalHoliday) {
-                            cell.classList.add('optional-holiday');
+                        if (optionalHolidayName) {
+                            cell.classList.add('optional-holiday'); // Apply yellow border if optional
                         }
 
-                        // Call the callback for event listeners (only for clickable tiles)
-                        // Important: Red tiles are not clickable, so only attach listener if not red.
+                        // Get text contents based on logic
+                        const texts = getTileTexts(state, publicHolidayName, optionalHolidayName);
+
+                        // Populate the tile with date number and new text spans
+                        cell.innerHTML = `
+                            <span class="date-number">${dayOfMonth}</span>
+                            <span class="state-text">${texts.stateText}</span>
+                            <span class="holiday-name-text">${texts.holidayNameText}</span>
+                        `;
+
+                        // Attach event listener only if not 'red'
                         if (!cell.classList.contains('red') && onTileRenderedCallback) {
                              onTileRenderedCallback(cell);
                         }
-                        dayOfMonth++; // Move to the next day for the next cell
-                        rowHasActualDate = true; // Mark that this row contains at least one actual date
+                        dayOfMonth++;
+                        rowHasActualDate = true;
                     }
-                } else { // This is an A or B summary column (columns 8 and 9)
-                    cell.classList.add('week-summary', 'empty-summary'); // Add empty-summary for initial state
-                    cell.innerHTML = '<div class="value"></div>'; // Placeholder for value
+                } else { // A or B summary column
+                    cell.classList.add('week-summary', 'empty-summary');
+                    cell.innerHTML = '<div class="value"></div>';
 
-                    if (j === 7) { // 8th column is for A value
+                    if (j === 7) {
                         cell.classList.add('week-summary-a');
-                    } else { // 9th column is for B value
+                    } else {
                         cell.classList.add('week-summary-b');
                     }
-                    cell.dataset.weekIndex = weekCounter; // Assign week index for uiUpdater
+                    cell.dataset.weekIndex = weekCounter;
                 }
                 calendarBody.appendChild(cell);
             }
             
-            // After each full 9-column row, check if we need to continue to the next row.
-            // If the previous row did not contain any actual dates and all days of the month have been placed,
-            // we can stop generating more rows.
             if (dayOfMonth > daysInMonth && !rowHasActualDate) {
                 break; 
             }
-            // Increment week counter only if this row contained at least one actual date
-            // or if it was a row with leading empty days that would contain dates later in the week.
             if (rowHasActualDate || (i === 0 && firstDayGridIndex > 0) || (dayOfMonth <= daysInMonth)) {
                  weekCounter++;
             }
@@ -135,6 +179,7 @@ const calendarGenerator = (function() {
         renderCalendar,
         nextMonth,
         prevMonth,
-        getCurrentMonthYear
+        getCurrentMonthYear,
+        getTileTexts // Expose helper for eventHandlers to use
     };
 })();

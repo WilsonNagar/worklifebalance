@@ -343,3 +343,83 @@ body {
         font-size: 1em;
     }
 }
+
+/* Add to your existing style.css */
+
+/* --- General Date Tile Layout for Text --- */
+.date-tile {
+    /* Existing styles remain */
+    display: flex; /* Make it a flex container */
+    flex-direction: column; /* Stack contents vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    padding: 5px 2px; /* Adjust padding to make space for text, was 5px */
+    line-height: 1.2; /* Adjust line height for better spacing */
+    overflow: hidden; /* Ensure text doesn't overflow */
+}
+
+/* --- Font Size Adjustments --- */
+.date-tile .date-number {
+    font-size: 1.6em; /* Make date number bigger, was 1.1em from parent */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 2px; /* Small space between date number and first text line */
+}
+
+.week-summary .value {
+    font-size: 1.4em; /* Make A/B numbers bigger, was 0.9em from parent */
+    font-weight: bold;
+    color: #333;
+}
+
+/* --- New Text Label Styling --- */
+.date-tile .state-text {
+    font-size: 0.7em; /* Smaller font for state (WFH, Leave, WFO, Optional Holiday) */
+    font-weight: 600; /* Slightly bolder */
+    color: #555; /* Default gray for state text */
+    text-align: center;
+    line-height: 1.2;
+    padding: 0 2px; /* Small horizontal padding */
+    box-sizing: border-box; /* Include padding in element's total width/height */
+}
+
+.date-tile .holiday-name-text {
+    font-size: 0.65em; /* Even smaller for holiday names */
+    font-style: italic;
+    color: #777; /* Lighter gray for holiday names */
+    text-align: center;
+    line-height: 1.1;
+    white-space: normal; /* Allow text to wrap if too long */
+    padding: 0 2px; /* Small horizontal padding */
+    box-sizing: border-box;
+}
+
+/* Specific coloring for state text based on tile state */
+.date-tile.leave .state-text {
+    color: #4CAF50; /* Green for Leave */
+}
+.date-tile.working .state-text {
+    color: #2196F3; /* Blue for WFO */
+}
+/* For 'normal' state, default color is fine */
+
+
+/* Adjustments for red (weekend/public holiday) tiles */
+.date-tile.red .date-number,
+.date-tile.red .state-text,
+.date-tile.red .holiday-name-text {
+    color: #cc0000; /* Ensure red color applies to all text parts */
+}
+
+/* Optional Holiday specific text color (if different from default state) */
+.date-tile.optional-holiday .state-text {
+    color: #e6a700; /* Darker yellow for "Optional Holiday" text */
+}
+
+
+/* Make sure empty tiles don't show text placeholders */
+.date-tile.empty .date-number,
+.date-tile.empty .state-text,
+.date-tile.empty .holiday-name-text {
+    visibility: hidden; /* Hide text in empty cells */
+}
