@@ -69,9 +69,9 @@ const calculationEngine = (function() {
 
         let totalSumBForMonth = 0;
         let userSelectedWorkingDaysCount = 0;
-        let totalLeavesTaken = 0;
-        let totalOptionalLeavesTaken = 0; // Keeps track of all optional leaves marked as 'leave'
-        let optionalLeavesToSubtractFromC = 0; // NEW: This will be the conditional sum for C's formula
+        let totalLeavesTaken = 0; // Counts regular leaves
+        let totalOptionalLeavesTaken = 0; // Counts optional holidays marked as 'leave'
+        let optionalLeavesToSubtractFromC = 0; // Conditional sum for C's formula
 
         // Debugging log: Start of recalculation
         console.log(`--- Recalculating for ${month + 1}/${year} ---`);
@@ -107,12 +107,12 @@ const calculationEngine = (function() {
                 userSelectedWorkingDaysCount++;
             }
 
-            // Accumulate total leaves taken (any day marked 'leave')
+            // CORRECTED LOGIC: Mutually exclusive counting for Leaves Taken and Optional Leaves Taken
             if (currentState === 'leave') {
-                totalLeavesTaken++;
-                // Accumulate total optional leaves taken (if it's an optional holiday and marked as leave)
                 if (isOptionalHoliday) {
-                    totalOptionalLeavesTaken++;
+                    totalOptionalLeavesTaken++; // This is an optional leave
+                } else {
+                    totalLeavesTaken++; // This is a regular leave (not an optional holiday)
                 }
             }
             
@@ -127,13 +127,12 @@ const calculationEngine = (function() {
                 const actualWeekDays = week.filter(d => d !== null);
 
                 const A = calculateA(actualWeekDays);
-                const B = calculateB(actualWeekDays, A); // B will be 0 if leavesInWeek >= X
+                const B = calculateB(actualWeekDays, A);
 
                 totalSumBForMonth += B;
 
-                // NEW LOGIC for optionalLeavesToSubtractFromC:
-                // Only count optional leaves in this week towards subtraction from C if B did NOT become 0.
-                if (B !== 0) { // This means leavesInWeek < X for this week
+                // Conditional accumulation for optionalLeavesToSubtractFromC
+                if (B !== 0) { // If B for this week is NOT 0 (i.e., leavesInWeek < X)
                     let optionalLeavesInThisWeek = 0;
                     actualWeekDays.forEach(dayInWeek => {
                         if (dayInWeek === null) return;
@@ -144,10 +143,10 @@ const calculationEngine = (function() {
                     optionalLeavesToSubtractFromC += optionalLeavesInThisWeek;
                 }
                 
-                // Debugging log: Weekly summary
+                // Debugging log: Weekly summary (can be commented out if too verbose)
                 console.log(`--- End of Week (or month) Summary ---`);
                 console.log(`  Week Index: ${weekIndex}, A: ${A}, B: ${B}`);
-                console.log(`  Leaves in this week: ${leavesInWeek(actualWeekDays)} (for B calculation)`); // Helper for debug
+                console.log(`  Optional Leaves contributing to C subtraction for this week: ${optionalLeavesToSubtractFromC - (weeklyCalculations[weekIndex-1]?.optionalLeavesToSubtractFromC || 0)}`); // Show weekly delta
                 console.log(`  Cumulative totalSumBForMonth: ${totalSumBForMonth}`);
                 console.log(`  Cumulative optionalLeavesToSubtractFromC: ${optionalLeavesToSubtractFromC}`);
                 console.log(`------------------------------------`);
@@ -159,16 +158,16 @@ const calculationEngine = (function() {
             }
         }
         
-        // Calculate the final C value using the NEW formula:
-        // max(totalB - working days - optional holiday leaves (conditional), 0)
+        // Calculate the final C value using the formula: max(totalB - working days - optional holiday leaves (conditional), 0)
         const finalCValue = Math.max(totalSumBForMonth - userSelectedWorkingDaysCount - optionalLeavesToSubtractFromC, 0);
 
         // Debugging log: Final results
         console.log(`=== Final Calculation Results for ${month + 1}/${year} ===`);
         console.log(`Total Sum of B for Month (totalSumBForMonth): ${totalSumBForMonth}`);
         console.log(`User Selected Working Days Count (userSelectedWorkingDaysCount): ${userSelectedWorkingDaysCount}`);
-        console.log(`Total Optional Leaves Taken (all): ${totalOptionalLeavesTaken}`); // This is just the raw count for display
-        console.log(`Optional Leaves contributing to C subtraction: ${optionalLeavesToSubtractFromC}`); // This is the filtered count
+        console.log(`Total Leaves Taken (excluding optional leaves): ${totalLeavesTaken}`); // Clarified log
+        console.log(`Total Optional Leaves Taken (for display): ${totalOptionalLeavesTaken}`); // Clarified log
+        console.log(`Optional Leaves contributing to C subtraction (conditional): ${optionalLeavesToSubtractFromC}`);
         console.log(`Final C Value (max(SumB - UserWorking - ConditionalOptionalHolidayLeaves, 0)): ${finalCValue}`);
         console.log(`================================================`);
 
@@ -180,7 +179,7 @@ const calculationEngine = (function() {
         };
     }
 
-    // Helper function for debugging, matches logic inside calculateB for 'leavesInWeek'
+    // Helper function for debugging (not part of core calculation)
     function leavesInWeek(weekDates) {
         let count = 0;
         weekDates.forEach(day => {
