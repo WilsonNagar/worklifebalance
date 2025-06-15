@@ -1,31 +1,39 @@
+# Workflow name displayed in the GitHub Actions tab
 name: Deploy to GitHub Pages
 
+# Controls when the workflow will run
 on:
   push:
     branches:
-      - master  # or main if your main branch is called main
+      - master # This workflow will run when code is pushed to the 'master' branch
 
+# Permissions granted to the GITHUB_TOKEN for this workflow
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read   # Allows reading repository content
+  pages: write     # Allows deploying to GitHub Pages
+  id-token: write  # Required for OIDC authentication by deploy-pages action
 
+# Defines a single job named 'deploy'
 jobs:
   deploy:
+    # Specifies the type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Steps for the 'deploy' job
     steps:
-    - name: Checkout repository
+    - name: Checkout repository # Step to check out your repository code
       uses: actions/checkout@v4
 
-    - name: Configure Pages
+    - name: Configure GitHub Pages # Step to configure the GitHub Pages environment
       uses: actions/configure-pages@v3
 
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v2
+    - name: Upload artifact # Step to upload your static files as an artifact
+      uses: actions/upload-pages-artifact@v3 # Updated to v3 for future compatibility
       with:
-        path: .  # directory with your static files (current directory in this case)
+        # The path to the directory containing your static website files.
+        # '.' means the root of your repository. Adjust if your site is in a subfolder (e.g., 'public' or 'build').
+        path: .
 
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4  # Updated to v4
+    - name: Deploy to GitHub Pages # Step to deploy the uploaded artifact to GitHub Pages
+      id: deployment # Gives this step an ID so its outputs can be referenced
+      uses: actions/deploy-pages@v4 # Remains v4 as per current recommendations
