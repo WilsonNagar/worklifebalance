@@ -423,3 +423,65 @@ body {
 .date-tile.empty .holiday-name-text {
     visibility: hidden; /* Hide text in empty cells */
 }
+
+/* Add to your existing style.css */
+
+/* --- Background Icons for Date Tiles (Paths Corrected & Opacity Decreased) --- */
+.date-tile {
+    position: relative;
+    overflow: hidden;
+    /* Ensure existing flexbox rules (display: flex, flex-direction: column etc.) are present */
+}
+
+/* Base styling for all background icons to ensure consistency */
+.date-tile::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 65%; /* Icon size */
+    height: 65%; /* Icon size */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.05; /* Significantly decreased opacity for readability (was 0.2) */
+    pointer-events: none; /* Make sure it doesn't interfere with clicks */
+    z-index: 0; /* Place behind text */
+}
+
+/* Specific icons based on state */
+
+/* WFH (Normal Tile) */
+.date-tile.normal::before {
+    background-image: url('images/wfh.png'); /* Corrected path */
+}
+
+/* WFO (Working Tile) */
+.date-tile.working::before {
+    background-image: url('images/wfo.png'); /* Corrected path */
+}
+
+/* Leave Tile (Regular Leave) */
+.date-tile.leave::before {
+    background-image: url('images/leave.png'); /* Corrected path */
+}
+
+/* Optional Holiday Tile (dark yellow border) - always shows the party icon */
+/* This rule must come AFTER the .date-tile.leave rule if optional-holiday.leave should have a different icon */
+.date-tile.optional-holiday::before {
+    background-image: url('images/party.png'); /* Corrected path */
+    opacity: 0.08; /* Slightly higher opacity for special days, but still subtle (was 0.25) */
+}
+
+/* Red (Weekend/Public Holiday) Tiles - ensure no icon or very subtle */
+.date-tile.red::before {
+    background-image: none !important;
+    opacity: 0;
+}
+
+/* Empty Tiles - no icon */
+.date-tile.empty::before {
+    background-image: none !important;
+    opacity: 0;
+}
