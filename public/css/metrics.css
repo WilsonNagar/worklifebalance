@@ -1,48 +1,114 @@
 /* css/metrics.css */
 
-/* --- Metrics Display Group (Used within the sidebar) --- */
-/* Note: The old .metrics-display-row styles are effectively moved and adapted into css/sidebar.css */
+/* --- Metrics Display Row --- */
+.metrics-display-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    /* Light mode default border */
+    padding-top: 5px;
+    transition: border-color 0.3s ease;
+    /* Smooth transition */
+}
 
-/* Base style for all metric boxes (total office days, compliance, leaves taken) */
+/* Dark Mode styles for Metrics Display Row */
+body.dark-mode .metrics-display-row {
+    border-bottom-color: #555;
+    /* Darker border */
+}
+
+/* Base style for all metric boxes within the metrics-display-row */
 .metric-box {
-    background-color: #eaf5ff; /* Light blue background */
-    border: 1px solid #cce0ff; /* Matching border */
+    background-color: #eaf5ff;
+    /* Light mode default background */
+    border: 1px solid #cce0ff;
+    /* Light mode default border */
     border-radius: 10px;
     padding: 12px 20px;
     font-size: 1em;
     font-weight: bold;
     color: #333;
+    /* Light mode default text */
     text-align: center;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 180px;
+    max-width: 280px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    /* Light mode default shadow */
     display: flex;
-    flex-direction: column; /* Stack text and numbers vertically within the box */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    /* Smooth transition */
+}
+
+/* Dark Mode styles for Metric Boxes */
+body.dark-mode .metric-box {
+    background-color: #4a4a4a;
+    /* Darker background */
+    border-color: #666;
+    /* Darker border */
+    color: #e0e0e0;
+    /* Lighter text */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
 }
 
 /* Specific styling for spans inside metric boxes that hold numbers */
 .metric-box span:not(.compliance-icon):not(.compliance-text) {
     color: #007bff;
+    /* Light mode default highlight color */
     font-size: 1.2em;
+    transition: color 0.3s ease;
+    /* Smooth transition */
 }
 
-/* Compliance Status specific styling (within .metric-box) */
+/* Dark Mode styles for Numbers in Metric Boxes */
+body.dark-mode .metric-box span:not(.compliance-icon):not(.compliance-text) {
+    color: #88bbff;
+    /* Lighter blue highlight */
+}
+
+
+/* --- Compliance Status specific styling (within .metric-box) --- */
 .compliance-status {
     background-color: #f9f9f9;
+    /* Light mode default background */
     border-color: #eee;
+    /* Light mode default border */
     color: #333;
+    /* Light mode default text */
     padding: 12px 15px;
     font-size: 1em;
-    flex-direction: row; /* Ensure icon and text are in a row */
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 8px; /* Gap between icon and text */
+    gap: 8px;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    /* Smooth transition */
+}
+
+/* Dark Mode styles for Compliance Status */
+body.dark-mode .compliance-status {
+    background-color: #5a5a5a;
+    /* Darker background */
+    border-color: #777;
+    /* Darker border */
+    color: #e0e0e0;
+    /* Lighter text */
 }
 
 .compliance-status .compliance-text {
     text-align: center;
-    flex-grow: 1; /* Allow text to take available space */
+    flex-grow: 1;
 }
 
 .compliance-status .compliance-icon {
@@ -57,21 +123,53 @@
 /* Non-Compliant State */
 .compliance-status.non-compliant {
     background-color: #ffe0e0;
+    /* Light mode default */
     border-color: #ff9999;
     color: #cc0000;
 }
-.compliance-status.non-compliant .compliance-icon {
-    background-image: url('../images/cross-icon.png');
+
+/* Dark Mode styles for Non-Compliant State */
+body.dark-mode .compliance-status.non-compliant {
+    background-color: #6a3e3e;
+    /* Darker red */
+    border-color: #a05050;
+    color: #ffcccc;
+    /* Lighter red text */
 }
+
+body.dark-mode .compliance-status.non-compliant .compliance-icon {
+    background-image: url('../images/cross-icon.png');
+    /* Need to provide a dark-mode version of the cross icon if desired, otherwise it stays the same */
+    /* If the PNG has transparent background, it might look fine. If it's a solid fill, it might need inversion. */
+    /* Assuming transparent PNG for now. */
+}
+
 
 /* Compliant State */
 .compliance-status.compliant {
     background-color: #e0ffe0;
+    /* Light mode default */
     border-color: #99ff99;
     color: #008000;
 }
-.compliance-status.compliant .compliance-icon {
-    background-image: url('../images/check-icon.png');
+
+/* Dark Mode styles for Compliant State */
+body.dark-mode .compliance-status.compliant {
+    background-color: #3e6a3e;
+    /* Darker green */
+    border-color: #50a050;
+    color: #ccffcc;
+    /* Lighter green text */
 }
 
-/* The .count-box styles are covered by .metric-box */
+body.dark-mode .compliance-status.compliant .compliance-icon {
+    background-image: url('../images/check-icon.png');
+    /* Same as above, assuming transparent PNG */
+}
+
+
+/* --- Count Box (Leaves Taken, Optional Leaves Taken) --- */
+/* These styles are integrated into .metric-box and will receive overrides from .metric-box where applicable. */
+/* The content styling for spans (like color and font-size) inside .count-box
+   is covered by .metric-box span:not(.compliance-icon):not(.compliance-text)
+*/

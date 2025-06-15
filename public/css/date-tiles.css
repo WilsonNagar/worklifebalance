@@ -2,23 +2,30 @@
 
 /* --- Date Tile Base Styling --- */
 .date-tile {
-    position: relative; /* Needed for background icons */
-    overflow: hidden; /* Ensure background image doesn't overflow rounded corners */
-    background-color: #f7f7f7; /* Default fallback */
-    border: 1px solid #e0e0e0;
+    position: relative;
+    overflow: hidden;
+    background-color: #f7f7f7; /* Light mode default */
+    border: 1px solid #e0e0e0; /* Light mode default */
     border-radius: 8px;
     display: flex;
-    flex-direction: column; /* Stack contents vertically */
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    aspect-ratio: 1 / 1; /* Makes tiles square */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-    font-size: 1.1em; /* Base font size, overridden by child spans */
-    color: #444; /* Base text color, overridden by child spans */
-    padding: 5px 2px; /* Adjust padding to make space for text */
-    line-height: 1.2; /* Adjust line height for better spacing */
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease, color 0.2s ease; /* Smooth transition */
+    font-size: 1.1em;
+    color: #444; /* Light mode default text */
+    padding: 5px 2px;
+    line-height: 1.2;
     box-sizing: border-box;
+}
+
+/* Dark Mode styles for Base Date Tile */
+body.dark-mode .date-tile {
+    background-color: #4a4a4a; /* Dark background */
+    border-color: #666; /* Darker border */
+    color: #e0e0e0; /* Light text */
 }
 
 .date-tile.empty {
@@ -26,98 +33,169 @@
     border: none;
     cursor: default;
 }
+/* Dark Mode styles for Empty Tiles */
+body.dark-mode .date-tile.empty {
+    background-color: transparent; /* Remains transparent */
+    border: none; /* Remains no border */
+}
 
 /* --- Specific Tile State Backgrounds & Hover Effects --- */
 
 /* Normal Tile (WFH) */
 .date-tile.normal {
-    background-color: #FFF9C4; /* Very light, soft yellow */
-    border-color: #FFEE58; /* Slightly brighter yellow border */
+    background-color: #FFF9C4; /* Light mode default */
+    border-color: #FFEE58; /* Light mode default */
+}
+/* Dark Mode styles for Normal Tile (WFH) */
+body.dark-mode .date-tile.normal {
+    background-color: #5d5d3e; /* Darker, desaturated yellow for dark mode */
+    border-color: #8f8f58; /* Matching border */
 }
 .date-tile.normal:not(.red):hover {
-    background-color: #FFFDE7; /* Even lighter on hover for subtlety */
-    border-color: #FFEB3B; /* Slightly more prominent border on hover */
+    background-color: #FFFDE7; /* Light mode hover */
+    border-color: #FFEB3B; /* Light mode hover */
     transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(255, 249, 196, 0.3);
+    box-shadow: 0 2px 8px rgba(255, 249, 196, 0.3); /* Light mode hover */
+}
+/* Dark Mode hover for Normal Tile (WFH) */
+body.dark-mode .date-tile.normal:not(.red):hover {
+    background-color: #72724a; /* Slightly lighter dark yellow on hover */
+    border-color: #a3a362;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* Leave Tile */
 .date-tile.leave {
-    background-color: #d1f7d1; /* Slightly richer green */
-    border-color: #4CAF50; /* Matching border */
+    background-color: #d1f7d1; /* Light mode default */
+    border-color: #4CAF50; /* Light mode default */
+}
+/* Dark Mode styles for Leave Tile */
+body.dark-mode .date-tile.leave {
+    background-color: #3d6a3d; /* Darker green for dark mode */
+    border-color: #50a050; /* Matching border */
 }
 .date-tile.leave:not(.red):hover {
-    background-color: #e6fae6; /* Lighter green on hover */
+    background-color: #e6fae6; /* Light mode hover */
     border-color: #66CC66;
     transform: translateY(-2px);
     box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
 }
+/* Dark Mode hover for Leave Tile */
+body.dark-mode .date-tile.leave:not(.red):hover {
+    background-color: #4a804a; /* Slightly lighter dark green on hover */
+    border-color: #65c065;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
 
 /* Working Tile (WFO) */
 .date-tile.working {
-    background-color: #d1e9ff; /* Slightly richer blue */
-    border-color: #2196F3; /* Matching border */
+    background-color: #d1e9ff; /* Light mode default */
+    border-color: #2196F3; /* Light mode default */
+}
+/* Dark Mode styles for Working Tile (WFO) */
+body.dark-mode .date-tile.working {
+    background-color: #3e5e8e; /* Darker blue for dark mode */
+    border-color: #5070a0; /* Matching border */
 }
 .date-tile.working:not(.red):hover {
-    background-color: #e6f2ff; /* Lighter blue on hover */
+    background-color: #e6f2ff; /* Light mode hover */
     border-color: #6699FF;
     transform: translateY(-2px);
     box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
 }
+/* Dark Mode hover for Working Tile (WFO) */
+body.dark-mode .date-tile.working:not(.red):hover {
+    background-color: #4a75b0; /* Slightly lighter dark blue on hover */
+    border-color: #6592c0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
 
 /* Red (Weekends and Public Holidays) */
 .date-tile.red {
-    background-color: #ffe6e6; /* Light red */
-    border-color: #ff6666;
-    color: #cc0000;
+    background-color: #ffe6e6; /* Light mode default */
+    border-color: #ff6666; /* Light mode default */
+    color: #cc0000; /* Light mode default */
     cursor: default;
 }
+/* Dark Mode styles for Red Tiles */
+body.dark-mode .date-tile.red {
+    background-color: #6a3d3d; /* Darker red */
+    border-color: #a05050; /* Darker red */
+    color: #ffaaaa; /* Lighter red text */
+}
+
 
 /* Optional Holiday Tile - has its own light yellow background and thick border */
 .date-tile.optional-holiday {
-    border: 4px solid #cc8800;
+    border: 4px solid #cc8800; /* Light mode default */
+}
+/* Dark Mode styles for Optional Holiday Tile Border */
+body.dark-mode .date-tile.optional-holiday {
+    border-color: #e6a700; /* Lighter border for dark mode visibility */
 }
 /* Optional Holiday specific text color */
 .date-tile.optional-holiday .state-text {
-    color: #333; /* Dark text for readability on optional holiday tiles */
+    color: #333; /* Light mode default */
+}
+/* Dark Mode text color for Optional Holiday State Text */
+body.dark-mode .date-tile.optional-holiday .state-text {
+    color: #ccc; /* Lighter text for dark mode */
 }
 
 
 /* --- Text Label Styling --- */
 .date-tile .date-number {
-    font-size: 2.4em; /* Make date number bigger */
+    font-size: 1.6em;
     font-weight: bold;
-    color: #333;
+    color: #333; /* Light mode default */
     margin-bottom: 2px;
+}
+/* Dark Mode styles for Date Number Text */
+body.dark-mode .date-tile .date-number {
+    color: #e0e0e0; /* Lighter text */
 }
 
 .date-tile .state-text {
-    font-size: 0.8em; /* Make text little bigger */
+    font-size: 0.8em;
     font-weight: 600;
-    text-transform: uppercase; /* All uppercase */
-    color: #555; /* Default gray for state text, overridden by specific state colors */
+    text-transform: uppercase;
+    color: #555; /* Light mode default */
     text-align: center;
     line-height: 1.2;
     padding: 0 2px;
     box-sizing: border-box;
 }
+/* Dark Mode styles for State Text (general, overridden by specific optional-holiday rule) */
+body.dark-mode .date-tile .state-text {
+    color: #a0a0a0; /* Lighter gray */
+}
 
 .date-tile .holiday-name-text {
-    font-size: 0.85em; /* Even smaller for holiday names */
+    font-size: 0.65em;
     font-style: italic;
-    color: #101010;
+    color: #777; /* Light mode default */
     text-align: center;
     line-height: 1.1;
     white-space: normal;
     padding: 0 2px;
     box-sizing: border-box;
 }
+/* Dark Mode styles for Holiday Name Text */
+body.dark-mode .date-tile .holiday-name-text {
+    color: #b0b0b0; /* Lighter gray */
+}
 
 /* Ensure red color applies to all text parts for red tiles */
 .date-tile.red .date-number,
 .date-tile.red .state-text,
 .date-tile.red .holiday-name-text {
-    color: #cc0000;
+    color: #cc0000; /* Light mode default */
+}
+/* Dark Mode styles for Red Tile Text */
+body.dark-mode .date-tile.red .date-number,
+body.dark-mode .date-tile.red .state-text,
+body.dark-mode .date-tile.red .holiday-name-text {
+    color: #ffaaaa; /* Lighter red */
 }
 
 /* Make sure empty tiles don't show text placeholders */
@@ -139,27 +217,15 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 0.05;
+    opacity: 0.05; /* Base opacity, might adjust for dark mode */
     pointer-events: none;
     z-index: 0;
+    filter: none; /* No filter by default */
 }
 
-.date-tile.normal::before {
-    background-image: url('../images/wfh.png'); /* Path from css/date-tiles.css to images/ */
+/* Dark Mode filter for icons (e.g., invert brightness to make them visible on dark backgrounds) */
+body.dark-mode .date-tile::before {
+    filter: invert(0.8) hue-rotate(180deg); /* Invert and shift hue slightly for better visibility */
+    opacity: 0.07; /* Slightly higher opacity in dark mode */
 }
-.date-tile.working::before {
-    background-image: url('../images/wfo.png'); /* Path from css/date-tiles.css to images/ */
-}
-.date-tile.leave::before {
-    background-image: url('../images/leave.png'); /* Path from css/date-tiles.css to images/ */
-}
-.date-tile.optional-holiday::before {
-    background-image: url('../images/party.png'); /* Path from css/date-tiles.css to images/ */
-    opacity: 0.08;
-}
-
-.date-tile.red::before,
-.date-tile.empty::before {
-    background-image: none !important;
-    opacity: 0;
-}
+/* Specific icon paths are already set */

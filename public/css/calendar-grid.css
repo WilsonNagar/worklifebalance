@@ -3,13 +3,20 @@
 /* --- Weekdays Header and Calendar Body Grid --- */
 #week-days {
     display: grid;
-    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr; /* 7 days + 2 columns for A and B */
+    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr;
     font-weight: bold;
     margin-bottom: 15px;
-    color: #777;
+    color: #777; /* Light mode default text */
     text-align: center;
     padding: 5px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #eee; /* Light mode default border */
+    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
+}
+
+/* Dark Mode styles for Weekdays Header */
+body.dark-mode #week-days {
+    color: #a0a0a0; /* Lighter gray text */
+    border-bottom-color: #555; /* Darker border */
 }
 
 .day-name {
@@ -19,32 +26,17 @@
 .week-data-header {
     padding: 8px 0;
     font-size: 0.9em;
-    color: #666;
+    color: #666; /* Light mode default text */
+    transition: color 0.3s ease; /* Smooth transition */
+}
+
+/* Dark Mode styles for A/B Header Text */
+body.dark-mode .week-data-header {
+    color: #a0a0a0; /* Lighter gray text */
 }
 
 #calendar-body {
     display: grid;
-    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr; /* Matches header for alignment */
+    grid-template-columns: repeat(7, 1fr) 1.5fr 1.5fr;
     gap: 8px;
-}
-
-/* css/calendar-grid.css (ADD THESE RULES AT THE VERY BOTTOM) */
-
-/* --- TEMPORARY HIDING RULES FOR DEBUGGING --- */
-/* (These are the rules from responsive.css related to .hide-weekly-summary) */
-
-/* When .calendar-container has .hide-weekly-summary, hide the A/B column headers */
-.calendar-container.hide-weekly-summary #week-days .week-data-header {
-    display: none !important;
-}
-
-/* When .calendar-container has .hide-weekly-summary, hide the A/B value summary boxes */
-.calendar-container.hide-weekly-summary .week-summary {
-    display: none !important;
-}
-
-/* Adjust the grid columns for both the day names header and the calendar body when hidden */
-.calendar-container.hide-weekly-summary #week-days,
-.calendar-container.hide-weekly-summary #calendar-body {
-    grid-template-columns: repeat(7, 1fr) !important; /* Forces 7 columns and removes A/B column space */
 }

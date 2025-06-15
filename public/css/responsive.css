@@ -42,29 +42,27 @@
     }
     .metrics-display-group .metric-box {
         width: 45%; /* Two columns for metrics on medium screens */
-        min-width: unset; /* Allow flexibility */
-        max-width: unset; /* Remove max-width for this arrangement */
+        min-width: unset;
+        max-width: unset;
     }
 
     .calendar-legend {
         flex-direction: row; /* Arrange legend items horizontally */
         flex-wrap: wrap;
         justify-content: center;
-        gap: 15px 20px; /* Horizontal and vertical gap */
-        border-top: none; /* Remove border */
-        padding: 0; /* Remove padding */
-        width: auto; /* Allow width to shrink to content */
+        gap: 15px 20px;
+        border-top: none;
+        padding: 0;
+        width: auto;
     }
     .legend-item {
-        padding-left: 0; /* Remove indent */
+        padding-left: 0;
     }
 }
 
-@media (max-width: 768px) { /* Adjustments for smaller screens (original breakpoint) */
-    /* Many rules previously here are now handled by the 992px breakpoint for the sidebar */
-
+@media (max-width: 768px) {
     .calendar-header {
-        flex-direction: column; /* Stack month navigation and h2 */
+        flex-direction: column;
         align-items: flex-start;
         padding-bottom: 10px;
     }
@@ -84,16 +82,15 @@
 }
 
 @media (max-width: 600px) {
-    /* Further stacking for very small screens */
-    .metrics-display-group { /* Make metrics stack vertically on very small screens */
+    .metrics-display-group {
         flex-direction: column;
         align-items: center;
     }
     .metrics-display-group .metric-box {
-        width: 90%; /* Single column for metrics */
+        width: 90%;
         max-width: none;
     }
-    .calendar-legend { /* Make legend stack vertically on very small screens */
+    .calendar-legend {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
@@ -106,4 +103,23 @@
         padding: 6px 12px;
         font-size: 0.9em;
     }
+}
+
+/* When .calendar-container has .hide-weekly-summary, hide the A/B column headers */
+/* Note the addition of .main-calendar-area in the selector path */
+.calendar-container.hide-weekly-summary .main-calendar-area #week-days .week-data-header {
+    display: none !important;
+}
+
+/* When .calendar-container has .hide-weekly-summary, hide the A/B value summary boxes */
+/* Note the addition of .main-calendar-area in the selector path */
+.calendar-container.hide-weekly-summary .main-calendar-area .week-summary {
+    display: none !important;
+}
+
+/* Adjust the grid columns for both the day names header and the calendar body when hidden */
+/* Note the addition of .main-calendar-area in the selector path */
+.calendar-container.hide-weekly-summary .main-calendar-area #week-days,
+.calendar-container.hide-weekly-summary .main-calendar-area #calendar-body {
+    grid-template-columns: repeat(7, 1fr) !important; /* Forces 7 columns and removes A/B column space */
 }

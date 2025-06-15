@@ -1,25 +1,30 @@
 /* css/header.css */
 
-/* --- Top Controls Bar (REMOVED from HTML, so these styles are now effectively unused but kept for reference if needed) --- */
-/*
+/* --- Top Controls Bar --- */
 .top-controls-bar {
     width: 90%;
     max-width: 1200px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background-color: #ffffff;
+    background-color: #ffffff; /* Light mode default */
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Light mode shadow */
     padding: 15px 25px;
     margin-bottom: 20px;
     flex-wrap: wrap;
     gap: 15px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
 }
-*/
 
-#reset-month-data-btn { /* This rule is now overridden by .sidebar-btn if present, or acts as fallback */
-    background-color: #dc3545;
+/* Dark Mode styles for Top Controls Bar */
+body.dark-mode .top-controls-bar {
+    background-color: #4a4a4a; /* Darker background */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+#reset-month-data-btn {
+    background-color: #dc3545; /* Light mode default */
     color: white;
     border: none;
     border-radius: 6px;
@@ -31,47 +36,61 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-#reset-month-data-btn:hover {
-    background-color: #c82333;
-    transform: translateY(-1px);
+/* Dark Mode styles for Reset Button */
+body.dark-mode #reset-month-data-btn {
+    background-color: #bd2130; /* Slightly darker red */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+body.dark-mode #reset-month-data-btn:hover {
+    background-color: #a71d2a;
+}
+body.dark-mode #reset-month-data-btn:active {
+    background-color: #921c27;
 }
 
-#reset-month-data-btn:active {
-    background-color: #bd2130;
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
 
 /* --- Calendar Header (Month Navigation) --- */
 .calendar-header {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 25px; /* Margin below header */
-    border-bottom: 1px solid #eee;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee; /* Light mode default border */
     padding-bottom: 15px;
     flex-wrap: wrap;
-    gap: 15px; /* Gap between arrows and month text */
+    gap: 15px;
+    transition: border-color 0.3s ease; /* Smooth transition */
+}
+
+/* Dark Mode styles for Calendar Header */
+body.dark-mode .calendar-header {
+    border-bottom-color: #555; /* Darker border */
 }
 
 .calendar-header h2 {
     margin: 0;
-    color: #333;
+    color: #333; /* Light mode default text */
     font-size: 1.8em;
     text-align: center;
+    transition: color 0.3s ease; /* Smooth transition */
+}
+
+/* Dark Mode styles for Month/Year Text */
+body.dark-mode .calendar-header h2 {
+    color: #e0e0e0; /* Lighter text color */
 }
 
 .month-navigation {
     display: flex;
     align-items: center;
-    gap: 15px; /* Margin between month text and arrows */
+    gap: 15px;
 }
 
 /* --- Arrow Button Styling --- */
 .nav-arrow-btn {
     background-color: transparent;
-    color: #007bff;
-    border: 2px solid #007bff;
+    color: #007bff; /* Light mode default */
+    border: 2px solid #007bff; /* Light mode default */
     border-radius: 50%;
     width: 38px;
     height: 38px;
@@ -80,20 +99,21 @@
     align-items: center;
     font-size: 1.5em;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
     flex-shrink: 0;
-    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.15);
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.15); /* Light mode shadow */
 }
 
-.nav-arrow-btn:hover {
-    background-color: #007bff;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.2);
+/* Dark Mode styles for Arrow Buttons */
+body.dark-mode .nav-arrow-btn {
+    color: #88bbff; /* Lighter blue arrow */
+    border-color: #88bbff; /* Lighter blue border */
+    box-shadow: 0 2px 5px rgba(136, 187, 255, 0.25); /* Adjusted shadow */
 }
-
-.nav-arrow-btn:active {
-    background-color: #0056b3;
-    transform: translateY(0);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+body.dark-mode .nav-arrow-btn:hover {
+    background-color: #88bbff; /* Fill with light blue on hover */
+    color: #333; /* Dark text on hover */
+}
+body.dark-mode .nav-arrow-btn:active {
+    background-color: #6a9edc;
 }
